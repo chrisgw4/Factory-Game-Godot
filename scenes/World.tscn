@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/factory/coal_factory/Coal_Factory.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/world/World.gd" type="Script" id=2]
+[ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=3]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="Resources_Label" type="RichTextLabel" parent="CanvasLayer"]
+margin_right = 77.0
+margin_bottom = 40.0
+fit_content_height = true
+scroll_active = false
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+
+[node name="Resources" type="Node2D" parent="."]
+
+[node name="Factories" type="Node2D" parent="."]
+
+[node name="Coal_Factory" parent="Factories" instance=ExtResource( 1 )]
+position = Vector2( 162, 110 )
