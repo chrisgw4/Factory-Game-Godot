@@ -1,20 +1,53 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/factory/coal_factory/Coal_Factory.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/world/World.gd" type="Script" id=2]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://scripts/world/world_tilemap.gd" type="Script" id=5]
+[ext_resource path="res://scripts/GUI/Factory Selector.gd" type="Script" id=6]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="TileMap" type="TileMap" parent="."]
+cell_size = Vector2( 32, 32 )
+format = 1
+script = ExtResource( 5 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
 
 [node name="Resources_Label" type="RichTextLabel" parent="CanvasLayer"]
-margin_right = 77.0
+margin_right = 401.0
 margin_bottom = 40.0
 fit_content_height = true
 scroll_active = false
+
+[node name="Factory Selector" type="GridContainer" parent="CanvasLayer"]
+margin_left = 891.0
+margin_right = 947.0
+margin_bottom = 600.0
+size_flags_horizontal = 0
+columns = 2
+script = ExtResource( 6 )
+
+[node name="Coal_Button" type="TextureButton" parent="CanvasLayer/Factory Selector"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 4 )
+
+[node name="TextureButton2" type="TextureButton" parent="CanvasLayer/Factory Selector"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 4 )
+
+[node name="TextureButton3" type="TextureButton" parent="CanvasLayer/Factory Selector"]
+margin_top = 68.0
+margin_right = 64.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 4 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 
@@ -23,4 +56,4 @@ scroll_active = false
 [node name="Factories" type="Node2D" parent="."]
 
 [node name="Coal_Factory" parent="Factories" instance=ExtResource( 1 )]
-position = Vector2( 162, 110 )
+position = Vector2( 150, 110 )

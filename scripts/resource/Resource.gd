@@ -5,7 +5,7 @@ var resource_name: String = ""
 var resource_index = null
 var go_position = Vector2(0,0)
 var at_position = false
-var tween = get_child(0)
+onready var tween = get_child(0)
 
 
 

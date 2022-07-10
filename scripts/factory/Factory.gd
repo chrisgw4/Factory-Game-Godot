@@ -15,7 +15,7 @@ func _ready():
 
 
 func spawn_resource():
-	if self.produced_resource == null:
+	if self.produced_resource == "":
 		return
 	
 

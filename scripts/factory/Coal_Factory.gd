@@ -20,8 +20,9 @@ func spawn_resource():
 	
 	var tween:Tween = resource.get_node("Tween")
 	
-	resource.go_position.x = self.global_position.x+RNG.randi_range(-40,40)
-	resource.go_position.y = self.global_position.y+RNG.randi_range(-40,40)
+	while resource.go_position == Vector2(0,0) or self.global_position.distance_to(resource.go_position) > 40:
+		resource.go_position.x = self.global_position.x+RNG.randi_range(-40,40)
+		resource.go_position.y = self.global_position.y+RNG.randi_range(-40,40)
 	
 	resource.global_position = self.global_position
 	
