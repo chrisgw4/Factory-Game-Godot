@@ -1,14 +1,7 @@
-extends AnimatedSprite
+extends KinematicBody2D
 
 
-var resource_name: String = ""
-var resource_index = null
-var go_position = Vector2(0,0)
-var at_position = false
-onready var tween = get_child(0)
-var sell_value = 0
-
-
+var collection_range = 200
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

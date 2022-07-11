@@ -9,6 +9,10 @@ func _ready():
 	 # Replace with function body.
 	self.produced_resource = "coal"
 	self.production_speed = 10
+	
+	# costs 10 coal to purchase coal factory
+	self.price = 10
+	self.payment = "Coal"
 
 func spawn_resource():
 	if self.produced_resource == null:
@@ -32,7 +36,7 @@ func spawn_resource():
 	#tween.start()
 	
 	
-	self.get_parent().get_parent().get_node("Resources").add_child(resource)
+	self.get_parent().get_parent().get_parent().get_node("Resources").add_child(resource)
 	
 	resource.tween.interpolate_property(resource, "position",
 		self.global_position, resource.go_position, .15,

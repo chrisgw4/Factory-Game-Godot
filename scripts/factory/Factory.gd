@@ -7,6 +7,8 @@ var produced_resource:String = ""
 
 var time_counter: float = 0
 var RNG = RandomNumberGenerator.new()
+var price = 0
+var payment = ""
 
 
 # Called when the node enters the scene tree for the first time.

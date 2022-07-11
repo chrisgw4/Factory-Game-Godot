@@ -1,18 +1,15 @@
-extends AnimatedSprite
+extends TextureButton
 
 
-var resource_name: String = ""
-var resource_index = null
-var go_position = Vector2(0,0)
-var at_position = false
-onready var tween = get_child(0)
-var sell_value = 0
-
+onready var open_position = get_rect().position
+onready var closed_position = get_rect().position+Vector2(130,0)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
+
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

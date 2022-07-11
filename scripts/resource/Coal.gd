@@ -8,6 +8,8 @@ extends "res://scripts/resource/Resource.gd"
 func _ready():
 	 # Replace with function body.
 	self.resource_index = 0
+	self.sell_value = 1
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
