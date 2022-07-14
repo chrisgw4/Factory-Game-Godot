@@ -14,9 +14,9 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			# event.position works with the scaling of the window
-			self.clicked_cell = world_to_map(event.position+camera.global_position)
-			self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
-			
+			#self.clicked_cell = world_to_map(event.position+camera.global_position)
+			#self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
+			get_tile_at_mouse_pos()
 			# finds if an object is placed in the tile that is clicked
 			for node in get_parent().get_node("Placed-Buildings").get_children():
 				for placed_object in node.get_children():

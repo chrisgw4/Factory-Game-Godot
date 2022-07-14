@@ -67,41 +67,7 @@ func _collect_resources(mouse_coords:Vector2):
 	
 	
 	
-func _move_camera(delta:float):
-	#var nextPos = Vector2(0,0)
-	#if camera.position.x <= camera.limit_right and camera.position.x >= camera.limit_left and camera.position.y >= camera.limit_top and camera.position.y <= camera.limit_bottom:
-	if Input.is_action_pressed("move_right"):
-		camera.position.x += 200*delta
-	if Input.is_action_pressed("move_left"):
-		camera.position.x -= 200*delta
-	if Input.is_action_pressed("move_down"):
-		camera.position.y += 200*delta
-	if Input.is_action_pressed("move_up"):
-		camera.position.y -= 200*delta
-	#print(str(camera.position.y+camera.get_viewport().size.y) + " " + str(camera.limit_bottom))
-	
-	# clamps camera no matter the size, and works flawlessly to prevent camera from going out of bounds
-	var left = camera.limit_left + (camera.offset.x*camera.zoom.x)
-	var right = camera.limit_right - (camera.offset.x*camera.zoom.x) - camera.get_viewport_rect().size.x
-	var top = camera.limit_top + (camera.offset.y*camera.zoom.y)
-	var bottom = camera.limit_bottom - (camera.offset.y*camera.zoom.y) - camera.get_viewport_rect().size.y
-	
-	camera.position.x = clamp(camera.position.x, left, right)
-	camera.position.y = clamp(camera.position.y, top, bottom)
-	
-	# keeps the camera from getting offset dramatically when at the world borders
-	#if camera.position.y+camera.get_viewport().size.y >= camera.limit_bottom:
-	#	camera.position.y = camera.limit_bottom-camera.get_viewport().size.y
-	#if camera.position.y <= camera.limit_top:
-	#	camera.position.y = camera.limit_top
-	#print(camera.get_viewport().size.x)
-	#if camera.position.x+camera.get_viewport().size.x >= camera.limit_right:
-		#camera.position.x = camera.limit_right-camera.get_viewport().size.x
-		#print(camera.position.x)
-		
-	#if camera.position.x <= camera.limit_left:
-	#	camera.position.x = camera.limit_left
-		
+
 	
 
 
@@ -111,7 +77,8 @@ func _process(delta):
 	
 	#spawn_factory()
 	camera.set_limit_drawing_enabled(true)
-	_move_camera(delta)
+	camera.move_camera(delta)
+	#_move_camera(delta)
 	_collect_resources(mouse_coords)
 	_update_factories(delta)
 	
