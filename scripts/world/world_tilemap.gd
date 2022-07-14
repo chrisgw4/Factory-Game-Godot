@@ -6,6 +6,8 @@ var tile_center_pos = null
 onready var factory_selector = get_parent().get_node("CanvasLayer/ScrollContainer/Factory Selector")
 onready var collector_selector = self.get_parent().get_node("CanvasLayer/Collector Selector")
 
+onready var temp_buildings = get_parent().get_node("Temp-Buildings")
+
 onready var camera = get_parent().get_node("Camera2D")
 
 func _unhandled_input(event):
@@ -63,9 +65,31 @@ func _spawn_collector():
 		self.get_parent().get_node("Placed-Buildings/Auto-Collectors").add_child(f)
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+
+
+func get_tile_at_mouse_pos():
+	var mouse_coords = get_global_mouse_position()
+	self.clicked_cell = world_to_map(mouse_coords)
+	self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
+	
+
+# spawns a temporary building, that gets removed every frame and re-added, to not allow spawning or collecting of the object, also shows where you're placing building
+func spawn_temp_building():
+	get_tile_at_mouse_pos()
+	for node in get_parent().get_node("Placed-Buildings").get_children():
+		for placed_object in node.get_children():
+			if placed_object.global_position == self.tile_center_pos:
+				return
+	if factory_selector.selected_button_index != -1:
+		var f = factory_selector._get_factory_type().instance()
+		f.global_position = self.tile_center_pos
+		f.modulate = Color(0.552941, 0.552941, 0.552941, 0.290196)
+		temp_buildings.add_child(f)
+	elif collector_selector.selected_button_index != -1:
+		var f = collector_selector._get_collector_type().instance()
+		f.global_position = self.tile_center_pos
+		f.modulate = Color(0.552941, 0.552941, 0.552941, 0.290196)
+		temp_buildings.add_child(f)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -74,5 +98,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	for child in temp_buildings.get_children():
+		temp_buildings.remove_child(child)
+	spawn_temp_building()

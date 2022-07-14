@@ -19,6 +19,7 @@ limit_left = -2000
 limit_top = -2000
 limit_right = 2000
 limit_bottom = 2000
+editor_draw_limits = true
 
 [node name="TileMap" type="TileMap" parent="."]
 cell_size = Vector2( 32, 32 )
@@ -179,3 +180,5 @@ texture_normal = ExtResource( 4 )
 [node name="Factories" type="Node2D" parent="Placed-Buildings"]
 
 [node name="Auto-Collectors" type="Node2D" parent="Placed-Buildings"]
+
+[node name="Temp-Buildings" type="Node2D" parent="."]
