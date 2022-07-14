@@ -4,17 +4,45 @@ var zoom_min:Vector2 = Vector2(0.2,0.2)
 var zoom_max:Vector2 = Vector2(2.0,2.0)
 var zoom_speed:Vector2 = Vector2(0.2,0.2)
 
+
+var zoom_step = 1.1
+
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.is_pressed():
+	if event is InputEventMouse:
+		if event.is_pressed() and not event.is_echo():
+			var mouse_position = event.position
 			if event.button_index == BUTTON_WHEEL_UP:
-				if zoom > zoom_min:
-					zoom -= zoom_speed
+				zoom_at_point(zoom_step,mouse_position)
 			if event.button_index == BUTTON_WHEEL_DOWN:
-				if zoom < zoom_max:
-					zoom += zoom_speed
-					
-			
+				zoom_at_point(1/zoom_step,mouse_position)
+
+func zoom_at_point(zoom_change, point):
+	var c0 = global_position # camera position
+	
+	var screen_width = ProjectSettings.get_setting("display/window/size/width")
+	var screen_height = ProjectSettings.get_setting("display/window/size/height")
+	
+	var v0 = Vector2(get_viewport().size.x*(screen_width/get_viewport().size.x), get_viewport().size.y*(screen_height/get_viewport().size.y))# viewport size
+	var c1 # next camera position
+	var z0 = zoom # current zoom value
+	var z1 = z0 * zoom_change # next zoom value
+
+	c1 = c0 + (-0.5*v0 + point)*(z0 - z1)
+	if z1 > zoom_min and z1 < zoom_max:
+		zoom = z1
+		global_position = c1
+
+
+#func _inputs(event):
+#	if event is InputEventMouseButton:
+#		if event.is_pressed():
+#			if event.button_index == BUTTON_WHEEL_UP:
+#				if zoom > zoom_min:
+#					zoom -= zoom_speed
+#			if event.button_index == BUTTON_WHEEL_DOWN:
+#				if zoom < zoom_max:
+#					zoom += zoom_speed
+
 
 func move_camera(delta:float):
 	#var nextPos = Vector2(0,0)
