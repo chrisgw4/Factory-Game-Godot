@@ -1,9 +1,6 @@
 extends "res://scripts/factory/Factory.gd"
 
 
-
-
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	 # Replace with function body.
@@ -22,11 +19,11 @@ func spawn_resource():
 	var coal = load("res://scenes/resource/Coal.tscn")
 	var resource = coal.instance()
 	
-	var tween:Tween = resource.get_node("Tween")
+	var tween = resource.get_node("Tween")
 	
 	while resource.go_position == Vector2(0,0) or self.global_position.distance_to(resource.go_position) > 40:
-		resource.go_position.x = self.global_position.x+RNG.randi_range(-40,40)
-		resource.go_position.y = self.global_position.y+RNG.randi_range(-40,40)
+		resource.go_position.x = self.global_position.x+RNG.randi_range(-self.radius,self.radius)
+		resource.go_position.y = self.global_position.y+RNG.randi_range(-self.radius,self.radius)
 	
 	resource.global_position = self.global_position
 	

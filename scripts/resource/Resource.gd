@@ -1,12 +1,12 @@
 extends AnimatedSprite
 
 
-var resource_name: String = ""
+var resource_name:String = ""
 var resource_index = null
-var go_position = Vector2(0,0)
-var at_position = false
-onready var tween = get_child(0)
-var sell_value = 0
+var go_position:Vector2 = Vector2(0,0)
+var at_position:bool = false
+onready var tween:Tween = get_child(0)
+var sell_value:float = 0
 
 
 

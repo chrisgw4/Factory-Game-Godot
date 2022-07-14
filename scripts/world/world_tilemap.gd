@@ -15,12 +15,28 @@ func _unhandled_input(event):
 			self.clicked_cell = world_to_map(event.position+camera.global_position)
 			self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
 			
+			# finds if an object is placed in the tile that is clicked
 			for node in get_parent().get_node("Placed-Buildings").get_children():
 				for placed_object in node.get_children():
+					#if node.name == "Factories":
+					
+					# this line makes it so when you click anywhere not in a menu, it makes every "selected" part in the object = to false
+					#placed_object.selected = false
+					
 			#for factory in get_parent().get_node("Placed-Buildings/Factories").get_children():
 					if placed_object.global_position == self.tile_center_pos:
-						print("fail")
+						#if node.name == "Factories":
+						placed_object.selected = !placed_object.selected
+						for node2 in get_parent().get_node("Placed-Buildings").get_children():
+							for placed_object2 in node2.get_children():
+								if placed_object2 != placed_object:
+									placed_object2.selected = false
+							#print("YEEHAW")
+						#print("fail")
 						return
+			
+					#if node.name == "Factories":
+						#if 
 			#print(self.tile_center_pos)
 			#print(event.global_position)
 			#print(str(collector_selector.selected_button_index) + " COLLECTOR")

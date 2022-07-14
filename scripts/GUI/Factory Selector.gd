@@ -1,11 +1,11 @@
 extends GridContainer
 
 
-var selected_button_index = -1
+var selected_button_index:int = -1
 var dict:Dictionary = {0:"res://scenes/factory/coal_factory/Coal_Factory.tscn"}
 onready var open_position = self.get_rect().position
 onready var closed_position = self.get_rect().position+Vector2(150,0)
-var closed = false
+var closed:bool = false
 
 onready var collector_selector = self.get_parent().get_parent().get_node("Collector Selector")
 

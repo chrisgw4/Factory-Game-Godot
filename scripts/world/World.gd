@@ -27,6 +27,7 @@ func _update_factories(delta:float):
 	for f in factories.get_children():
 		f.time_counter += delta
 		
+		
 		if f.time_counter >= f.production_speed:
 			f.spawn_resource()
 			f.time_counter -= f.production_speed
@@ -40,17 +41,27 @@ func _collect_resources(mouse_coords:Vector2):
 		elif mouse_coords_camera_offset.distance_to(r.global_position) <= 40:
 			r.tween.interpolate_property(r, "position", r.global_position, mouse_coords_camera_offset, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			r.tween.start()
+			
+			# add a break if you want to make it collect only one at a time
+			# break
+			
 		elif mouse_coords_camera_offset.distance_to(r.global_position) > 40:
 			r.tween.interpolate_property(r, "position", r.global_position, r.go_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			r.tween.start()
 		
-		for c in collectors.get_children():
-			if (c.global_position.distance_to(r.global_position) <= c.collection_range):
-				r.tween.interpolate_property(r, "position", r.global_position, c.global_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		if collectors.get_child_count() > 0:
+			var closest_collector = collectors.get_children()[0]
+			for c in collectors.get_children():
+				if c.global_position.distance_to(r.global_position) < closest_collector.global_position.distance_to(r.global_position):
+					closest_collector = c
+			
+			if (closest_collector.global_position.distance_to(r.global_position) <= closest_collector.collection_range):
+				r.tween.interpolate_property(r, "position", r.global_position, closest_collector.global_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				r.tween.start()
-				if c.global_position.distance_to(r.global_position) <= 5:
+				if closest_collector.global_position.distance_to(r.global_position) <= 5:
 					r.queue_free()
 					player.resources[r.resource_index] += 1
+				
 		
 
 	
@@ -92,7 +103,37 @@ func _process(delta):
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.resources[0]) + '\n' + "Iron: " + str(player.resources[1]) 
 	resources_text.text += "\n" + "Coal On Screen: " + str(resources.get_child_count())
+	update()
 	#print(get_child_count())
 	#print(player.resources[0])
 	
+func _draw():
+	for f in factories.get_children():
+		if f.selected:
+			draw_circle_arc(f.global_position, f.radius, 0, 360, Color(1.0,1.0,1.0))
+	
+	for c in collectors.get_children():
+		if c.selected:
+			draw_circle_arc(c.global_position, c.radius, 0, 360, Color(1.0,1.0,1.0))
+			
+			#var nb_points = 32
+			#var points_arc = PoolVector2Array()
 
+			#for i in range(nb_points + 1):
+			#	var angle_point = deg2rad(0 + i * (360-0) / nb_points - 90)
+			#	points_arc.push_back(f.global_position + Vector2(cos(angle_point), sin(angle_point)) * 40)
+
+			#for index_point in range(nb_points):
+			#	draw_line(points_arc[index_point], points_arc[index_point + 1], Color(1.0,1.0,1.0))
+			#f._draw()
+	#print('d')
+func draw_circle_arc(center, radius, angle_from, angle_to, color):
+	var nb_points = 64
+	var points_arc = PoolVector2Array()
+
+	for i in range(nb_points + 1):
+		var angle_point = deg2rad(angle_from + i * (angle_to-angle_from) / nb_points - 90)
+		points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)
+
+	for index_point in range(nb_points):
+		draw_line(points_arc[index_point], points_arc[index_point + 1], color)
