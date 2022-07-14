@@ -1,9 +1,6 @@
 extends Node2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 onready var factories = get_node("Placed-Buildings/Factories")
 onready var collectors = get_node("Placed-Buildings/Auto-Collectors")
 onready var resources = get_node("Resources")
@@ -32,6 +29,8 @@ func _update_factories(delta:float):
 			f.spawn_resource()
 			f.time_counter -= f.production_speed
 
+
+
 func _collect_resources(mouse_coords:Vector2):
 	var mouse_coords_camera_offset = mouse_coords#+camera.global_position
 	for r in resources.get_children():
@@ -43,7 +42,7 @@ func _collect_resources(mouse_coords:Vector2):
 			r.tween.start()
 			
 			# add a break if you want to make it collect only one at a time
-			# break
+			#break
 			
 		elif mouse_coords_camera_offset.distance_to(r.global_position) > 40:
 			r.tween.interpolate_property(r, "position", r.global_position, r.go_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
@@ -63,13 +62,6 @@ func _collect_resources(mouse_coords:Vector2):
 					player.resources[r.resource_index] += 1
 				
 		
-
-	
-	
-	
-
-	
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -91,23 +83,13 @@ func _process(delta):
 func _draw():
 	for f in factories.get_children():
 		if f.selected:
-			draw_circle_arc(f.global_position, f.radius, 0, 360, Color(1.0,1.0,1.0))
+			draw_circle_arc_poly(f.global_position, f.radius, 0, 360, Color(0.552941, 0.552941, 0.552941, 0.290196))
 	
 	for c in collectors.get_children():
 		if c.selected:
-			draw_circle_arc(c.global_position, c.radius, 0, 360, Color(1.0,1.0,1.0))
-			
-			#var nb_points = 32
-			#var points_arc = PoolVector2Array()
+			#draw_circle_arc(c.global_position, c.radius, 0, 360, Color(1.0,1.0,1.0))
+			draw_circle_arc_poly(c.global_position, c.radius, 0, 360, Color(0.552941, 0.552941, 0.552941, 0.290196))
 
-			#for i in range(nb_points + 1):
-			#	var angle_point = deg2rad(0 + i * (360-0) / nb_points - 90)
-			#	points_arc.push_back(f.global_position + Vector2(cos(angle_point), sin(angle_point)) * 40)
-
-			#for index_point in range(nb_points):
-			#	draw_line(points_arc[index_point], points_arc[index_point + 1], Color(1.0,1.0,1.0))
-			#f._draw()
-	#print('d')
 func draw_circle_arc(center, radius, angle_from, angle_to, color):
 	var nb_points = 64
 	var points_arc = PoolVector2Array()
@@ -118,3 +100,14 @@ func draw_circle_arc(center, radius, angle_from, angle_to, color):
 
 	for index_point in range(nb_points):
 		draw_line(points_arc[index_point], points_arc[index_point + 1], color)
+
+func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
+	var nb_points = 32
+	var points_arc = PoolVector2Array()
+	points_arc.push_back(center)
+	var colors = PoolColorArray([color])
+
+	for i in range(nb_points + 1):
+		var angle_point = deg2rad(angle_from + i * (angle_to - angle_from) / nb_points - 90)
+		points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)
+	draw_polygon(points_arc, colors)

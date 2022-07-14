@@ -59,7 +59,6 @@ func _spawn_factory():
 func _spawn_collector():
 	if(self.clicked_cell != null and collector_selector.selected_button_index != -1):
 		#self.get_cell(tile_map.clicked_cell.x, tile_map.clicked_cell.y)
-		print("D")
 		var f = collector_selector._get_collector_type().instance()
 		f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Auto-Collectors").add_child(f)

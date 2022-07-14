@@ -32,7 +32,6 @@ func spawn_resource():
 	#	Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	#tween.start()
 	
-	
 	self.get_parent().get_parent().get_parent().get_node("Resources").add_child(resource)
 	
 	resource.tween.interpolate_property(resource, "position",
