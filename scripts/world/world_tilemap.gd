@@ -57,11 +57,15 @@ func _spawn_factory():
 		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
 
 func _spawn_collector():
-	if(self.clicked_cell != null and collector_selector.selected_button_index != -1):
+	if(self.clicked_cell != null and collector_selector.selected_button_index != -1 and collector_selector.building_dict[collector_selector.selected_button_index] == "Collector"):
 		#self.get_cell(tile_map.clicked_cell.x, tile_map.clicked_cell.y)
 		var f = collector_selector._get_collector_type().instance()
 		f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Auto-Collectors").add_child(f)
+	elif (self.clicked_cell != null and collector_selector.selected_button_index != -1 and collector_selector.building_dict[collector_selector.selected_button_index] == "Storage"):
+		var f = collector_selector._get_collector_type().instance()
+		f.global_position = self.tile_center_pos
+		self.get_parent().get_node("Placed-Buildings/Storages").add_child(f)
 
 
 
@@ -76,6 +80,8 @@ func get_tile_at_mouse_pos():
 func spawn_temp_building():
 	get_tile_at_mouse_pos()
 	for node in get_parent().get_node("Placed-Buildings").get_children():
+	#for num in range(0,2):
+		#var node = get_parent().get_node("Placed-Buildings").get_child(num)
 		for placed_object in node.get_children():
 			if placed_object.global_position == self.tile_center_pos:
 				return

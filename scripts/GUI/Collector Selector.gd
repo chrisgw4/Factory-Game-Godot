@@ -2,7 +2,8 @@ extends GridContainer
 
 
 var selected_button_index = -1
-var dict:Dictionary = {0:"res://scenes/collectors/Auto-Collector.tscn"}#, 1:"res://scenes/storage buildings/Base Storage.tscn"}
+var dict:Dictionary = {0:"res://scenes/collectors/Auto-Collector.tscn", 1:"res://scenes/storage buildings/Base Storage.tscn"}
+var building_dict:Dictionary = {0:"Collector", 1:"Storage"}
 onready var open_position = self.get_rect().position
 onready var closed_position = self.get_rect().position+Vector2(150,0)
 var closed = false
