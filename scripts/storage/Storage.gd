@@ -1,16 +1,12 @@
-extends "res://scripts/resource/Resource.gd"
+extends "res://scripts/Base_Building.gd"
 
 
-
+var resource_list:Array = [0,0,0,0,0]
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	 # Replace with function body.
-	self.resource_index = 0
-	self.sell_value = 1
-	self.resource_name = "Coal"
-
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

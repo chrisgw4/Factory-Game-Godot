@@ -31,9 +31,11 @@ func _update_factories(delta:float):
 
 
 
-func _collect_resources(mouse_coords:Vector2):
+func _collect_resources(mouse_coords:Vector2, delta:float):
 	var mouse_coords_camera_offset = mouse_coords#+camera.global_position
 	for r in resources.get_children():
+		r.lifetime -= delta
+		
 		if mouse_coords_camera_offset.distance_to(r.global_position) <= 5:
 			r.queue_free()
 			player.resources[r.resource_index] += 1
@@ -59,9 +61,12 @@ func _collect_resources(mouse_coords:Vector2):
 				r.tween.start()
 				if closest_collector.global_position.distance_to(r.global_position) <= 5:
 					r.queue_free()
-					player.resources[r.resource_index] += 1
-				
-		
+					closest_collector.resources[r.resource_index] += 1
+					#player.resources[r.resource_index] += 1
+		if r.lifetime < 10:
+			r.modulate = Color(1.0,1.0,1.0)
+		if r.lifetime < 0:
+			r.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -71,7 +76,7 @@ func _process(delta):
 	camera.set_limit_drawing_enabled(true)
 	camera.move_camera(delta)
 	#_move_camera(delta)
-	_collect_resources(mouse_coords)
+	_collect_resources(mouse_coords, delta)
 	_update_factories(delta)
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.resources[0]) + '\n' + "Iron: " + str(player.resources[1]) 
@@ -88,7 +93,16 @@ func _draw():
 	for c in collectors.get_children():
 		if c.selected:
 			#draw_circle_arc(c.global_position, c.radius, 0, 360, Color(1.0,1.0,1.0))
+			
+			var screen_width = ProjectSettings.get_setting("display/window/size/width")
+			var screen_height = ProjectSettings.get_setting("display/window/size/height")
+
+			c.text.rect_position = self.to_local(Vector2(c.global_position.x-40, c.global_position.y-91) - camera.position + Vector2(screen_width/2, screen_height/2))# + Vector2(camera.get_viewport().size.x*(camera.screen_width/camera.get_viewport().size.x), camera.get_viewport().size.y*(camera.screen_height/camera.get_viewport().size.y)))#Vector2(camera.screen_width/2, camera.screen_width/2))
+			c._show_resources_collected()
+			
 			draw_circle_arc_poly(c.global_position, c.radius, 0, 360, Color(0.552941, 0.552941, 0.552941, 0.290196))
+		elif c.text.visible and not c.selected:
+			c.text.visible = false
 
 func draw_circle_arc(center, radius, angle_from, angle_to, color):
 	var nb_points = 64

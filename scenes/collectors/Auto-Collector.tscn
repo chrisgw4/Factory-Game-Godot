@@ -22,3 +22,17 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="CollisionShape2D"]
 frames = SubResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+margin_left = -40.0
+margin_top = -91.0
+margin_right = 40.0
+margin_bottom = -11.0
+rect_min_size = Vector2( 80, 80 )
+fit_content_height = true
+scroll_active = false
+
+[node name="Node2D" type="Node2D" parent="."]

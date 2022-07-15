@@ -66,6 +66,8 @@ func move_camera(delta:float):
 	self.position.x = clamp(self.position.x, left, right)
 	self.position.y = clamp(self.position.y, top, bottom)
 	
+	
+	
 	# keeps the camera from getting offset dramatically when at the world borders
 	#if camera.position.y+camera.get_viewport().size.y >= camera.limit_bottom:
 	#	camera.position.y = camera.limit_bottom-camera.get_viewport().size.y
@@ -84,7 +86,6 @@ func move_camera(delta:float):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

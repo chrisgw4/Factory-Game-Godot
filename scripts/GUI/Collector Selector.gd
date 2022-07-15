@@ -2,7 +2,7 @@ extends GridContainer
 
 
 var selected_button_index = -1
-var dict:Dictionary = {0:"res://scenes/collectors/Auto-Collector.tscn"}
+var dict:Dictionary = {0:"res://scenes/collectors/Auto-Collector.tscn"}#, 1:"res://scenes/storage buildings/Base Storage.tscn"}
 onready var open_position = self.get_rect().position
 onready var closed_position = self.get_rect().position+Vector2(150,0)
 var closed = false
@@ -19,10 +19,9 @@ func _input(event):
 		if child.get_class() == "Tween":
 			break
 		if child.pressed:
-			#print('cheese' + str(index))
 			selected_button_index = index
 			factory_selector.selected_button_index = -1
-			print(selected_button_index)
+			#print(selected_button_index)
 		index+=1
 
 func _get_collector_type():
