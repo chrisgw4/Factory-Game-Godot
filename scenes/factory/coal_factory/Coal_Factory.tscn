@@ -7,5 +7,8 @@
 z_index = -1
 script = ExtResource( 2 )
 
+[node name="Sprite" parent="." index="0"]
+visible = false
+
 [node name="CollisionShape2D" parent="." index="2"]
 visible = false
