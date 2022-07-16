@@ -1,6 +1,6 @@
 extends "res://scripts/Base_Building.gd"
 
-onready var text:RichTextLabel = get_node("CanvasLayer/RichTextLabel")
+onready var text:RichTextLabel = get_node("Node2D/RichTextLabel")
 var collection_range:int = 200
 var resources:Array = [0,0,0,0,0]
 

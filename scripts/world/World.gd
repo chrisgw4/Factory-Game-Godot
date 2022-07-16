@@ -108,8 +108,8 @@ func _draw():
 			
 			var screen_width = ProjectSettings.get_setting("display/window/size/width")
 			var screen_height = ProjectSettings.get_setting("display/window/size/height")
-
-			c.text.rect_position = self.to_local(Vector2(c.global_position.x-40, c.global_position.y-91) - camera.position + Vector2(screen_width/2, screen_height/2))
+	
+			c.get_node("Node2D").global_position = c.global_position
 			c._show_resources_collected()
 			if not c.get_node("AnimationPlayer").is_playing():
 				c.get_node("AnimationPlayer").play("selected")
@@ -126,10 +126,8 @@ func _draw():
 	for s in storages.get_children():
 		if s.selected:
 			s.z_index = 0
-			var screen_width = ProjectSettings.get_setting("display/window/size/width")
-			var screen_height = ProjectSettings.get_setting("display/window/size/height")
-
-			s.text.rect_position = self.to_local(Vector2(s.global_position.x-40, s.global_position.y-91) - camera.position + Vector2(screen_width/2, screen_height/2))
+			
+			s.get_node("Node2D").global_position = s.global_position
 			s._show_resources_held()
 			draw_circle_arc_poly(s.global_position, s.radius, 0, 360, Color(0.552941, 0.552941, 0.552941, 0.290196))
 		elif s.text.visible and not s.selected:

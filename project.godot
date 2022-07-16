@@ -25,6 +25,7 @@ window/stretch/aspect="expand"
 [global]
 
 vsync=false
+fps=false
 
 [input]
 

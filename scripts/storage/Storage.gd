@@ -2,7 +2,7 @@ extends "res://scripts/Base_Building.gd"
 
 
 var resources:Array = [0,0,0,0,0]
-onready var text = get_node("CanvasLayer/RichTextLabel")
+onready var text = get_node("Node2D/RichTextLabel")
 
 var resources_dict:Dictionary = {0:"Coal", 1:"Iron", 2:"Null", 3:"Null", 4:"Null"}
 
