@@ -4,6 +4,7 @@
 [ext_resource path="res://scripts/resource/Coal.gd" type="Script" id=2]
 
 [node name="Coal" instance=ExtResource( 1 )]
+self_modulate = Color( 0.309804, 0.309804, 0.309804, 1 )
 scale = Vector2( 0.5, 0.5 )
 z_index = 1
 script = ExtResource( 2 )

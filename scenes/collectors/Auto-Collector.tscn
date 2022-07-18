@@ -58,11 +58,10 @@ frames = SubResource( 2 )
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Node2D"]
-visible = false
 margin_left = -200.0
-margin_top = -440.0
+margin_top = -470.0
 margin_right = -120.0
-margin_bottom = -360.0
+margin_bottom = -390.0
 rect_min_size = Vector2( 80, 80 )
 rect_scale = Vector2( 5, 5 )
 fit_content_height = true

@@ -17,6 +17,3 @@ z_index = -1
 [node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-
-[node name="RichTextLabel" parent="Node2D" index="0"]
-visible = false

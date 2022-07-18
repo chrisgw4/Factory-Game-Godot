@@ -7,8 +7,46 @@ onready var storages = get_node("Placed-Buildings/Storages")
 onready var resources = get_node("Resources")
 onready var player = get_node("Player")
 onready var resources_text = get_node("CanvasLayer/Resources_Label")
-onready var tile_map = get_node("TileMap")
 onready var camera = get_node("Camera2D")
+
+
+
+onready var tile_map:TileMap = get_node("TileMap")
+var RNG:RandomNumberGenerator = RandomNumberGenerator.new()
+var cell_size:Vector2 = Vector2(32,32)
+var width = 1024/cell_size.x
+var height = 1024/cell_size.y
+var grid = []
+
+var Tiles = {"empty":-1, "grass":0, "sand":1, "water":2}
+
+func _init_grid():
+	grid = []
+	for x in width:
+		grid.append([])
+		for y in height:
+			grid[x].append(-1)
+
+func GetRandomDirection():
+	var directions = [[-1,0],[1,0],[0,1],[0,-1]]
+	var direction = directions[RNG.randi()%4]
+	return Vector2(direction[0], direction[1])
+
+func _create_random_path():
+	pass
+
+func _spawn_tiles():
+	for x in width:
+		for y in height:
+			match grid[x][y]:
+				Tiles.empty:
+					pass
+				Tiles.floor:
+					tile_map.set_cellv(Vector2(x,y), 0)
+				Tiles.water:
+					pass
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -79,10 +117,9 @@ func unselect_all():
 func _process(delta):
 	var mouse_coords = get_local_mouse_position()#get_global_mouse_position()#get_viewport().get_mouse_position()
 	
-	#spawn_factory()
 	camera.set_limit_drawing_enabled(true)
 	camera.move_camera(delta)
-	#_move_camera(delta)
+	
 	_collect_resources(mouse_coords, delta)
 	_update_factories(delta)
 	
