@@ -19,34 +19,6 @@ var RNG:RandomNumberGenerator = RandomNumberGenerator.new()
 var cell_size:Vector2 = Vector2(32,32)
 var width = 1024/cell_size.x
 var height = 1024/cell_size.y
-var grid = []
-
-var Tiles = {"empty":-1, "grass":0, "sand":1, "water":2}
-
-func _init_grid():
-	grid = []
-	for x in width:
-		grid.append([])
-		for y in height:
-			grid[x].append(-1)
-
-func GetRandomDirection():
-	var directions = [[-1,0],[1,0],[0,1],[0,-1]]
-	var direction = directions[RNG.randi()%4]
-	return Vector2(direction[0], direction[1])
-
-
-
-func _spawn_tiles():
-	for x in width:
-		for y in height:
-			match grid[x][y]:
-				Tiles.empty:
-					pass
-				Tiles.floor:
-					tile_map.set_cellv(Vector2(x,y), 0)
-				Tiles.water:
-					pass
 
 
 func _create_or_load_save():
@@ -70,21 +42,23 @@ func _save_game():
 	_save.camera_pos = camera.position
 	_save.write_savegame()
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_create_or_load_save()
 	factories.load_factories()
 	load_chunk_map()
 	#_load_tile_world()
-	
+
+
+
 
 func _update_factories(delta:float):
 	for f in factories.get_children():
 		f.time_counter += delta
 		
-		
 		if f.time_counter >= f.production_speed:
-			if resources.get_child_count() < 300:
+			if resources.get_child_count() < 10000:
 				f.spawn_resource()
 				f.time_counter -= f.production_speed
 		
@@ -92,41 +66,38 @@ func _update_factories(delta:float):
 
 
 func _collect_resources(mouse_coords:Vector2, delta:float):
-	var mouse_coords_camera_offset = mouse_coords#+camera.global_position
+	var mouse_coords_camera_offset = mouse_coords #+camera.global_position
 	for r in resources.get_children():
 		r.lifetime -= delta
+		var dist = mouse_coords.distance_to(r.global_position)
 		
-		
-		
-		if mouse_coords_camera_offset.distance_to(r.global_position) <= 5:
+		if  dist <= 5:
 			r.queue_free()
 			player.stats.collected_resources[r.resource_index] += r.stack
-		elif mouse_coords_camera_offset.distance_to(r.global_position) <= 40:
-			r.tween.interpolate_property(r, "position", r.global_position, mouse_coords_camera_offset, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		elif dist <= 40:
+			r.tween.interpolate_property(r, "position", r.global_position, mouse_coords, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			r.tween.start()
-			
-			# add a break if you want to make it collect only one at a time
-			#break
-			
-		elif mouse_coords_camera_offset.distance_to(r.global_position) > 40:
+		elif dist > 40 and r.global_position.distance_to(r.go_position) > 5:
 			r.tween.interpolate_property(r, "position", r.global_position, r.go_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			r.tween.start()
 		
-		if collectors.get_child_count() > 0:
-			var closest_collector = collectors.get_children()[0]
-			for c in collectors.get_children():
-				if c.global_position.distance_to(r.global_position) < closest_collector.global_position.distance_to(r.global_position):
-					closest_collector = c
-			
-			if (closest_collector.global_position.distance_to(r.global_position) <= closest_collector.collection_range):
-				r.tween.interpolate_property(r, "position", r.global_position, closest_collector.global_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-				r.tween.start()
-				if closest_collector.global_position.distance_to(r.global_position) <= 5:
-					r.queue_free()
-					closest_collector.resources[r.resource_index] += r.stack
+		#if collectors.get_child_count() > 0:
+		#	var closest_collector = collectors.get_children()[0]
+		#	var closest_dist = closest_collector.global_position.distance_to(r.global_position)
+		#	for c in collectors.get_children():
+		#		if c.global_position.distance_to(r.global_position) < closest_dist:
+		#			closest_collector = c
+		#			closest_dist = c.global_position.distance_to(r.global_position)
+		#	
+		#	if (closest_dist <= closest_collector.collection_range):
+		#		#r.tween.interpolate_property(r, "position", r.global_position, closest_collector.global_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		#		#r.tween.start()
+		#		if closest_collector.global_position.distance_to(r.global_position) <= 5:
+		#			r.queue_free()
+		#			closest_collector.resources[r.resource_index] += r.stack
 					#player.resources[r.resource_index] += 1
 		if r.lifetime < 10:
-			r.modulate = Color(1.0,1.0,1.0)
+			r.modulate = Color(0.392157, 0.313726, 0.207843)#Color(1.0,1.0,1.0, 0.5)
 		if r.lifetime < 0:
 			r.queue_free()
 		
@@ -148,9 +119,6 @@ func unselect_all():
 			n.selected = false
 
 
-var loaded = false
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var mouse_coords = get_local_mouse_position()#get_global_mouse_position()#get_viewport().get_mouse_position()
@@ -158,6 +126,8 @@ func _process(delta):
 	camera.move_camera(delta)
 	
 	_collect_resources(mouse_coords, delta)
+	
+		
 	_update_factories(delta)
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.stats.collected_resources[0]) + '\n' + "Iron: " + str(player.stats.collected_resources[1]) 
@@ -167,9 +137,8 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		unselect_all()
 		
-	#print(get_child_count())
-	#print(player.resources[0])
-	
+
+
 func _draw():
 	for f in factories.get_children():
 		if f.selected:
@@ -208,6 +177,8 @@ func _draw():
 		elif s.text.visible and not s.selected:
 			s.z_index  -1
 			s.text.visible = false
+
+
 
 func draw_circle_arc(center, radius, angle_from, angle_to, color):
 	var nb_points = 64

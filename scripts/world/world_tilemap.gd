@@ -10,12 +10,15 @@ onready var temp_buildings = get_parent().get_node("Temp-Buildings")
 
 onready var camera = get_parent().get_node("Camera2D")
 
+onready var chunk_tile_map = get_parent().get_child(0)
+
 
 
 
 
 
 func _unhandled_input(event):
+	chunk_tile_map = get_parent().get_child(0)
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			# event.position works with the scaling of the window
@@ -48,10 +51,11 @@ func _unhandled_input(event):
 			#print(event.global_position)
 			#print(str(collector_selector.selected_button_index) + " COLLECTOR")
 			#print(str(factory_selector.selected_button_index) + " FACTORY")
-			if factory_selector.selected_button_index != -1:
-				_spawn_factory()
-			elif collector_selector.selected_button_index != -1:
-				_spawn_collector()
+			if not "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)):
+				if factory_selector.selected_button_index != -1:
+					_spawn_factory()
+				elif collector_selector.selected_button_index != -1:
+					_spawn_collector()
 			
 
 func _spawn_factory():
@@ -76,6 +80,10 @@ func _spawn_collector():
 		var f = collector_selector._get_collector_type().instance()
 		f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Storages").add_child(f)
+	elif (self.clicked_cell != null and collector_selector.selected_button_index != -1 and collector_selector.building_dict[collector_selector.selected_button_index] == "Conveyor"):
+		var f = collector_selector._get_collector_type().instance()
+		f.global_position = self.tile_center_pos
+		self.get_parent().get_node("Placed-Buildings/Conveyors").add_child(f)
 
 
 
@@ -99,11 +107,15 @@ func spawn_temp_building():
 		var f = factory_selector._get_factory_type().instance()
 		f.global_position = self.tile_center_pos
 		f.modulate = Color(0.552941, 0.552941, 0.552941, 0.290196)
+		if "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)):
+			f.modulate = Color(1, 0.203922, 0.203922, 0.454902)
 		temp_buildings.add_child(f)
 	elif collector_selector.selected_button_index != -1:
 		var f = collector_selector._get_collector_type().instance()
 		f.global_position = self.tile_center_pos
 		f.modulate = Color(0.552941, 0.552941, 0.552941, 0.290196)
+		if "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)):
+			f.modulate = Color(1, 0.427451, 0.427451, 0.482353)
 		temp_buildings.add_child(f)
 
 

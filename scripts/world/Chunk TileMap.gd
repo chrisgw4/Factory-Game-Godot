@@ -5,7 +5,7 @@ export(int) var chunk_width = 8
 export(int) var chunk_height = 8
 var heightMapTexture = NoiseTexture.new()
 
-var noise_seed = randi()
+var noise_seed = 0
 
 
 onready var player = get_parent().get_node("Camera2D")
@@ -14,6 +14,9 @@ onready var player = get_parent().get_node("Camera2D")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	var x = RandomNumberGenerator.new()
+	x.randomize()
+	noise_seed = randi()
 	heightMapTexture.width = 512
 	heightMapTexture.height = 512
 	if heightMapTexture.noise == null:
