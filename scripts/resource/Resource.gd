@@ -8,6 +8,11 @@ var at_position:bool = false
 onready var tween:Tween = get_child(0)
 var sell_value:float = 0
 var lifetime = 20
+var base_lifetime = 20
+
+var stacking:bool = false
+
+var stack = 1
 
 
 
@@ -19,3 +24,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_Tween_tween_all_completed():
+	if stacking:
+		pass

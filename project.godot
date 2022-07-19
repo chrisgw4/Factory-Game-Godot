@@ -8,6 +8,28 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://scripts/player/Player.gd"
+}, {
+"base": "Resource",
+"class": "PlayerStats",
+"language": "GDScript",
+"path": "res://scripts/resources/player_stats.gd"
+}, {
+"base": "Resource",
+"class": "SaveGame",
+"language": "GDScript",
+"path": "res://scripts/saves/SaveGame.gd"
+} ]
+_global_script_class_icons={
+"Player": "",
+"PlayerStats": "",
+"SaveGame": ""
+}
+
 [application]
 
 config/name="Factory Game"

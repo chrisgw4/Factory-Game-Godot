@@ -5,6 +5,9 @@ export(int) var chunk_width = 8
 export(int) var chunk_height = 8
 var heightMapTexture = NoiseTexture.new()
 
+var noise_seed = randi()
+
+
 onready var player = get_parent().get_node("Camera2D")
 
 
@@ -13,20 +16,26 @@ func _ready():
 	randomize()
 	heightMapTexture.width = 512
 	heightMapTexture.height = 512
-	heightMapTexture.noise = OpenSimplexNoise.new()
-	heightMapTexture.noise.seed = randi()
-	print("Seed: " + str(heightMapTexture.noise.seed))
+	if heightMapTexture.noise == null:
+		print('PPPPP')
+		heightMapTexture.noise = OpenSimplexNoise.new()
+		heightMapTexture.noise.seed = noise_seed
+		print("Seed: " + str(heightMapTexture.noise.seed))
+	
 	#generateGridChunk(player.position)
 	#setGridChunk(0,chunk_width, 0, chunk_height)
 	
 
 func generateGridChunk(playerpos:Vector2) -> void:
+	clear()
 	var chunk_center = world_to_map(playerpos)
 	var row_start: float = chunk_center.x - (chunk_width/2)
 	var row_end: float = chunk_center.x + (chunk_width/2)
 	var col_start: float = chunk_center.y - (chunk_height/2)
 	var col_end: float = chunk_center.y + (chunk_height/2)
 	setGridChunk(col_start, col_end, row_start, row_end)
+	
+	#print(heightMapTexture.noise.seed)
 	
 
 func setGridChunk(columnStart, columnEnd, rowStart, rowEnd):
@@ -50,10 +59,25 @@ func setGridChunk(columnStart, columnEnd, rowStart, rowEnd):
 				set_cellv(Vector2(mx,my),floor(mz/2))
 			
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
 
 func _on_MapUpdateTimer_timeout():
 	generateGridChunk(player.position)
+	if noise_seed != heightMapTexture.noise.seed:
+		heightMapTexture.noise.seed = noise_seed
+
+
+func save():
+	var save_dict = {
+		"filename" : get_filename(),
+		"parent" : get_parent().get_path(),
+		"noise_seed" : noise_seed,
+		"chunk_width" : chunk_width,
+		"chunk_height" : chunk_height,
+		
+	}
+	return save_dict
+
+
+
+
+

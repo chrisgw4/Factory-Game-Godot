@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/GUI/Collector Selector.gd" type="Script" id=1]
 [ext_resource path="res://scripts/world/World.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://sprites/tilemap/grass.png" type="Texture" id=10]
 [ext_resource path="res://sprites/tilemap/sand.png" type="Texture" id=11]
 [ext_resource path="res://sprites/tilemap/water.png" type="Texture" id=12]
+[ext_resource path="res://scripts/placed_buildings/Factories.gd" type="Script" id=13]
 [ext_resource path="res://scenes/Chunk TileMap.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
@@ -61,7 +62,9 @@
 [node name="World" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Chunk TileMap" parent="." instance=ExtResource( 14 )]
+[node name="Chunk TileMap" parent="." groups=["Persist"] instance=ExtResource( 14 )]
+cell_quadrant_size = 128
+chunk_width = 86
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -77,6 +80,7 @@ visible = false
 z_index = -3
 tile_set = SubResource( 1 )
 cell_size = Vector2( 32, 32 )
+cell_quadrant_size = 128
 format = 1
 script = ExtResource( 5 )
 
@@ -232,9 +236,12 @@ texture_normal = ExtResource( 4 )
 [node name="Placed-Buildings" type="Node2D" parent="."]
 
 [node name="Factories" type="Node2D" parent="Placed-Buildings"]
+script = ExtResource( 13 )
 
 [node name="Auto-Collectors" type="Node2D" parent="Placed-Buildings"]
 
 [node name="Storages" type="Node2D" parent="Placed-Buildings"]
 
 [node name="Temp-Buildings" type="Node2D" parent="."]
+
+[connection signal="tree_exiting" from="." to="." method="_on_World_tree_exiting"]

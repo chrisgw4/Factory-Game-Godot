@@ -10,6 +10,11 @@ onready var temp_buildings = get_parent().get_node("Temp-Buildings")
 
 onready var camera = get_parent().get_node("Camera2D")
 
+
+
+
+
+
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
@@ -52,9 +57,14 @@ func _unhandled_input(event):
 func _spawn_factory():
 	if(self.clicked_cell != null and get_parent().get_node("CanvasLayer/ScrollContainer/Factory Selector").selected_button_index != -1):
 		#self.get_cell(tile_map.clicked_cell.x, tile_map.clicked_cell.y)
-		var f = factory_selector._get_factory_type().instance()
+		var f = factory_selector._get_factory_type()
+		var x = factory_selector._get_factory_type()
+		
+		f = f.instance()
 		f.global_position = self.tile_center_pos
+		
 		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
+		
 
 func _spawn_collector():
 	if(self.clicked_cell != null and collector_selector.selected_button_index != -1 and collector_selector.building_dict[collector_selector.selected_button_index] == "Collector"):
