@@ -1,5 +1,6 @@
 extends "res://scripts/factory/Factory.gd"
 
+var size = Vector2(32,32)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,6 +11,8 @@ func _ready():
 	# costs 10 coal to purchase coal factory
 	self.price = 10
 	self.payment = "Coal"
+	self.building_name = "Coal_Factory"
+	
 
 func spawn_resource():
 	if self.produced_resource == null:
@@ -43,3 +46,15 @@ func spawn_resource():
 #	pass
 
 
+
+
+func _on_Area2D_input_event(viewport, event, shape_idx):
+	pass
+
+
+func _on_Area2D_mouse_entered():
+	self.entered = true
+
+
+func _on_Area2D_mouse_exited():
+	self.entered = false

@@ -9,6 +9,8 @@ onready var player = get_node("Player")
 onready var resources_text = get_node("GUI/Resources_Label")
 onready var camera = get_node("Camera2D")
 
+onready var _building_code_background = get_node("GUI/BuildingCodeBackground")
+
 onready var _chunk_tile_map = get_node("Chunk TileMap")
 
 var _save: SaveGame
@@ -116,6 +118,7 @@ func unselect_all():
 	for node in get_node("Placed-Buildings").get_children():
 		for n in node.get_children():
 			n.selected = false
+	
 	update()
 
 
@@ -206,6 +209,9 @@ func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
 
 func _on_World_tree_exiting():
 	pass
+	_save_game()
+	factories.save_factories()
+	save_chunk_map()
 	#print("OWEOIU")
 	#_save_tile_world()
 	#_save_game()
@@ -214,9 +220,10 @@ func _on_World_tree_exiting():
 	
 func _notification(what):
 	if what == NOTIFICATION_EXIT_TREE:
-		_save_game()
-		factories.save_factories()
-		save_chunk_map()
+		pass
+		#_save_game()
+		#factories.save_factories()
+		#save_chunk_map()
 
 
 func save_chunk_map():

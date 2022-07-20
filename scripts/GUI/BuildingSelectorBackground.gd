@@ -11,6 +11,7 @@ onready var close_button = get_node("CloseButton")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
+	_start_tween_to_close()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,7 +19,9 @@ func _process(delta):
 	if get_rect().position == close_base_position and visible:
 		self.visible = false
 		get_rect().position = ready_to_open
-	if get_rect().position != base_position and not self.visible and Input.is_action_just_pressed("open_building_menu"):
+	if get_parent().get_node("BuildingCodeBackground").visible and self.visible and get_rect().position == base_position:
+		_start_tween_to_close()
+	if get_rect().position != base_position and not self.visible and Input.is_action_just_pressed("open_building_menu") and not get_parent().get_node("BuildingCodeBackground").visible:
 		tween.interpolate_property(self, "rect_position", ready_to_open,  base_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		tween.start()
 		self.visible = true

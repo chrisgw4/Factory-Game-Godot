@@ -76,7 +76,6 @@ func save():
 		"noise_seed" : noise_seed,
 		"chunk_width" : chunk_width,
 		"chunk_height" : chunk_height,
-		
 	}
 	return save_dict
 

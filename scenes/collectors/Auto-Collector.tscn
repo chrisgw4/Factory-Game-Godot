@@ -56,6 +56,7 @@ shape = SubResource( 1 )
 frames = SubResource( 2 )
 
 [node name="Node2D" type="Node2D" parent="."]
+visible = false
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Node2D"]
 margin_left = -200.0

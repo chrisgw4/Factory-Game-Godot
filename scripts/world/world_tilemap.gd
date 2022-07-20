@@ -5,6 +5,11 @@ var tile_center_pos = null
 
 onready var factory_selector = get_parent().get_node("GUI/BuildingSelectorBackground/ScrollContainer/Factory Selector")
 onready var collector_selector = self.get_parent().get_node("GUI/Collector Selector")
+onready var first_change_var_input = get_parent().get_node("GUI/BuildingCodeBackground/FirstVar/FirstVarChangeInput")
+onready var building_code_background = get_parent().get_node("GUI/BuildingCodeBackground")
+
+
+onready var building_name_code_gui = get_parent().get_node("GUI/BuildingCodeBackground/Class/BuildingName")
 
 onready var temp_buildings = get_parent().get_node("Temp-Buildings")
 
@@ -34,10 +39,26 @@ func _unhandled_input(event):
 					#placed_object.selected = false
 					
 			#for factory in get_parent().get_node("Placed-Buildings/Factories").get_children():
-					if placed_object.global_position == self.tile_center_pos:
+					if placed_object.entered and Input.is_action_just_pressed("click"):#placed_object.global_position.x-placed_object.size.x >= tile_center_pos.x and tile_center_pos.x <= placed_object.global_position.x+placed_object.size.x:#tile_center_pos > map_to_world(world_to_map(placed_object.global_position-placed_object.size)) and tile_center_pos < map_to_world(world_to_map(placed_object.global_position+placed_object.size)) : #world_to_map(placed_object.global_position - placed_object.size) <= world_to_map(tile_center_pos)  or world_to_map(tile_center_pos) >= world_to_map(placed_object.global_position+placed_object.size)  : #world_to_map(placed_object.global_position) == clicked_cell or #placed_object.global_position == self.tile_center_pos:
 						
 						# when a placed object in Placed-Buildings is clicked, it will update World scene to draw the radius and show gui
 						placed_object.selected = !placed_object.selected
+						
+						
+						building_code_background._change_first_var(placed_object.first_changeable_var)
+						first_change_var_input.text = str(placed_object.production_speed)
+						
+						#building_code_background.visible = !building_code_background.visible
+						building_name_code_gui.text = placed_object.building_name
+						building_code_background.building = placed_object
+						
+						if placed_object.selected:
+							building_code_background._start_tween_to_open()
+						elif not placed_object.selected:
+							building_code_background._start_tween_to_close()
+						
+						
+						
 						get_parent().update()
 						
 						for node2 in get_parent().get_node("Placed-Buildings").get_children():
