@@ -6,7 +6,7 @@ onready var collectors = get_node("Placed-Buildings/Auto-Collectors")
 onready var storages = get_node("Placed-Buildings/Storages")
 onready var resources = get_node("Resources")
 onready var player = get_node("Player")
-onready var resources_text = get_node("CanvasLayer/Resources_Label")
+onready var resources_text = get_node("GUI/Resources_Label")
 onready var camera = get_node("Camera2D")
 
 onready var _chunk_tile_map = get_node("Chunk TileMap")
@@ -58,17 +58,16 @@ func _update_factories(delta:float):
 		f.time_counter += delta
 		
 		if f.time_counter >= f.production_speed:
-			if resources.get_child_count() < 10000:
+			if resources.get_child_count() < 8000:
 				f.spawn_resource()
 				f.time_counter -= f.production_speed
-		
 
 
 
 func _collect_resources(mouse_coords:Vector2, delta:float):
 	var mouse_coords_camera_offset = mouse_coords #+camera.global_position
 	for r in resources.get_children():
-		r.lifetime -= delta
+		#r.lifetime -= delta
 		var dist = mouse_coords.distance_to(r.global_position)
 		
 		if  dist <= 5:
@@ -127,12 +126,12 @@ func _process(delta):
 	
 	_collect_resources(mouse_coords, delta)
 	
-		
 	_update_factories(delta)
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.stats.collected_resources[0]) + '\n' + "Iron: " + str(player.stats.collected_resources[1]) 
 	resources_text.text += "\n" + "Coal On Screen: " + str(resources.get_child_count())
-	update()
+	
+	# UPDATE IS CALLED IN world_tilemap.gd
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		unselect_all()
@@ -205,15 +204,19 @@ func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
 
 
 func _on_World_tree_exiting():
+	pass
 	#print("OWEOIU")
 	#_save_tile_world()
-	_save_game()
-	factories.save_factories()
-	save_chunk_map()
+	#_save_game()
+	#factories.save_factories()
+	#save_chunk_map()
 	
 func _notification(what):
 	if what == NOTIFICATION_EXIT_TREE:
-		pass		
+		_save_game()
+		factories.save_factories()
+		save_chunk_map()
+
 
 func save_chunk_map():
 	var save_game = File.new()

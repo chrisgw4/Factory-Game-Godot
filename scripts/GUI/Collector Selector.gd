@@ -8,7 +8,7 @@ onready var open_position = self.get_rect().position
 onready var closed_position = self.get_rect().position+Vector2(150,0)
 var closed = false
 
-onready var factory_selector = self.get_parent().get_parent().get_node("CanvasLayer/ScrollContainer/Factory Selector")
+onready var factory_selector = self.get_parent().get_parent().get_node("GUI/BuildingSelectorBackground/ScrollContainer/Factory Selector")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

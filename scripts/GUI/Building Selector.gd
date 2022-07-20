@@ -2,12 +2,14 @@ extends GridContainer
 
 
 var selected_button_index:int = -1
-var dict:Dictionary = {0:"res://scenes/factory/coal_factory/Coal_Factory.tscn"}
+
+var dict:Dictionary = {0:"res://scenes/factory/coal_factory/Coal_Factory.tscn", 1:"res://scenes/collectors/Auto-Collector.tscn", 2:"res://scenes/storage buildings/Base Storage.tscn", 3:"res://scenes/conveyors/Conveyor.tscn"}
+var building_dict:Dictionary = {0:"Factory", 1:"Collector", 2:"Storage", 3:"Conveyor"}
 onready var open_position = self.get_rect().position
-onready var closed_position = self.get_rect().position+Vector2(150,0)
+#onready var closed_position = self.get_rect().position+Vector2(150,0)
 var closed:bool = false
 
-onready var collector_selector = self.get_parent().get_parent().get_node("Collector Selector")
+#onready var collector_selector = self.get_parent().get_parent().get_parent().get_node("Collector Selector")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,12 +21,13 @@ func _input(event):
 		if child.get_class() == "Tween":
 			break
 		if child.pressed:
-			#print('cheese' + str(index))
 			selected_button_index = index
-			collector_selector.selected_button_index = -1
+			if not get_parent().get_parent().tween.is_active():
+				get_parent().get_parent()._start_tween_to_close()
 		index+=1
+	
 
-func _get_factory_type():
+func _get_building_type():
 	#if selected_button_index == 1:
 	#	return load("res://scenes/collectors/Auto-Collector.tscn")
 	if selected_button_index != -1:

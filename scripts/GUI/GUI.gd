@@ -1,8 +1,8 @@
 extends CanvasLayer
 
 onready var factory_selector_handler = get_node("OpenCloseFactorySelector")
-onready var factory_selector = get_node("ScrollContainer/Factory Selector")
-onready var scroll_factory_button = get_node("ScrollContainer")
+onready var factory_selector = get_node("BuildingSelectorBackground/ScrollContainer/Factory Selector")
+onready var scroll_factory_button = get_node("BuildingSelectorBackground/ScrollContainer")
 onready var base_position_scroll_factory = scroll_factory_button.rect_global_position
 
 # Called when the node enters the scene tree for the first time.

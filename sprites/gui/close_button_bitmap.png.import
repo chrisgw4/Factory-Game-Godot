@@ -1,0 +1,15 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+path="res://.import/close_button_bitmap.png-0670b1dc70279430bc0e48cbd3f796a3.res"
+
+[deps]
+
+source_file="res://sprites/gui/close_button_bitmap.png"
+dest_files=[ "res://.import/close_button_bitmap.png-0670b1dc70279430bc0e48cbd3f796a3.res" ]
+
+[params]
+
+create_from=1
+threshold=0.2
