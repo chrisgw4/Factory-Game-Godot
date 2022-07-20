@@ -116,6 +116,7 @@ func unselect_all():
 	for node in get_node("Placed-Buildings").get_children():
 		for n in node.get_children():
 			n.selected = false
+	update()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
