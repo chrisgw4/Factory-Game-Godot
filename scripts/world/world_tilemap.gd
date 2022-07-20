@@ -17,8 +17,10 @@ onready var camera = get_parent().get_node("Camera2D")
 
 onready var chunk_tile_map = get_parent().get_child(0)
 
+var tile_size_dict:Dictionary = {"Factory":Vector2(1,1), "Hub":Vector2(3,3)}
 
-
+var temp_building_red = false
+var stop = false
 
 
 
@@ -26,6 +28,7 @@ func _unhandled_input(event):
 	chunk_tile_map = get_parent().get_child(0)
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
+			temp_building_red = false
 			# event.position works with the scaling of the window
 			#self.clicked_cell = world_to_map(event.position+camera.global_position)
 			#self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
@@ -68,8 +71,27 @@ func _unhandled_input(event):
 							
 						return
 			
+			# variable used to determine if code should stop from placing down a building
+			#var stop = false
+			#var temp_arrays = _fill_temp_tile_array(tile_size_dict[factory_selector.building_dict[factory_selector.selected_button_index]])
+			#for node in get_parent().get_node("Placed-Buildings").get_children():
+			#	if node.name != "Pre-Placement":
+			#		for building in node.get_children():
+			#			for i in range(0,building.tiles_placed_on_x.size()):
+			#				if clicked_cell == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]):
+			#					stop = true
+			#					temp_building_red = true
+			#				
+			#				for c in range(0,temp_arrays[0].size()):
+			#					if Vector2(temp_arrays[0][c],temp_arrays[1][c]) == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]):
+			#						stop = true
+			#						temp_building_red = true
+								
+							#if  in building.tiles_placed_on_x[i]:
+							#	stop = true
+							#	temp_building_red = true
 			
-			if not "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)):
+			if not "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)) and not stop:
 				if factory_selector.selected_button_index != -1:
 					_spawn_building()
 				
@@ -78,30 +100,72 @@ func _unhandled_input(event):
 func _spawn_building():
 	if factory_selector.selected_button_index == -1 or self.clicked_cell == null:
 		return
+	
+	
+			
+	
+	#var f = factory_selector._get_building_type()
 		
+	#f = f.instance()
+	#f.global_position = self.tile_center_pos
+	
+	var f = factory_selector._get_building_type()
+	f = f.instance()
+	print(f.name)
+	f.global_position = self.tile_center_pos
+	
+	
+	
 	if(factory_selector.building_dict[factory_selector.selected_button_index] == "Factory"):
-		var f = factory_selector._get_building_type()
 		
-		f = f.instance()
-		f.global_position = self.tile_center_pos
 		
 		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
 		
+		
 	elif(factory_selector.building_dict[factory_selector.selected_button_index] == "Collector"):
-		var f = factory_selector._get_building_type().instance()
-		f.global_position = self.tile_center_pos
+		#var f = factory_selector._get_building_type().instance()
+		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Auto-Collectors").add_child(f)
 		
+		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Storage"):
-		var f = factory_selector._get_building_type().instance()
-		f.global_position = self.tile_center_pos
+		#var f = factory_selector._get_building_type().instance()
+		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Storages").add_child(f)
 		
+		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Conveyor"):
-		var f = factory_selector._get_building_type().instance()
-		f.global_position = self.tile_center_pos
+		#var f = factory_selector._get_building_type().instance()
+		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Conveyors").add_child(f)
+		
+		
+	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Hub"):
+		#var f = factory_selector._get_building_type().instance()
+		#f.global_position = self.tile_center_pos
+		self.get_parent().get_node("Placed-Buildings/Hub").add_child(f)
 
+	_fill_building_tile_array(f)
+
+
+func _fill_building_tile_array(building):
+	#var tile_pos = Vector2(10,10)
+	for r in range(0,building.tile_rows):
+		for c in range(0,building.tile_cols):
+			building.tiles_placed_on_x.append(world_to_map(tile_center_pos).x-int(building.tile_cols/2) + r)
+			building.tiles_placed_on_y.append(world_to_map(tile_center_pos).y-int(building.tile_rows/2) + c)
+			#building.tiles_placed_on.append(Vector2(world_to_map(tile_center_pos).x-int(building.tile_cols/2) + r, world_to_map(tile_center_pos).y-int(building.tile_rows/2) + c))
+
+func _fill_temp_tile_array(vector2) -> Array: 
+	var temp_array_x = []
+	var temp_array_y = []
+	
+	for r in range(0,vector2.x):
+		for c in range(0,vector2.y):
+			temp_array_x.append(world_to_map(tile_center_pos).x-int(vector2.x/2) + r)
+			temp_array_y.append(world_to_map(tile_center_pos).y-int(vector2.y/2) + c)
+			#temp_array.append(Vector2(world_to_map(tile_center_pos).x-int(vector2.x/2) + r, world_to_map(tile_center_pos).y-int(vector2.y/2) + c))
+	return [temp_array_x, temp_array_y]
 
 
 func _spawn_collector():
@@ -131,19 +195,24 @@ func get_tile_at_mouse_pos():
 # spawns a temporary building, that gets removed every frame and re-added, to not allow spawning or collecting of the object, also shows where you're placing building
 func spawn_temp_building():
 	get_tile_at_mouse_pos()
-	for node in get_parent().get_node("Placed-Buildings").get_children():
-	#for num in range(0,2):
-		#var node = get_parent().get_node("Placed-Buildings").get_child(num)
-		for placed_object in node.get_children():
-			if placed_object.global_position == self.tile_center_pos:
-				return
+	
 	if factory_selector.selected_button_index != -1:
 		var f = factory_selector._get_building_type().instance()
 		f.global_position = self.tile_center_pos
 		f.modulate = Color(0.552941, 0.552941, 0.552941, 0.290196)
+		for node in get_parent().get_node("Placed-Buildings").get_children():
+			#for num in range(0,2):
+			#var node = get_parent().get_node("Placed-Buildings").get_child(num)
+			for placed_object in node.get_children():
+				if placed_object.global_position == self.tile_center_pos:
+					#return
+					f.modulate = Color(1, 0.203922, 0.203922, 0.454902)
 		if "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)):
 			f.modulate = Color(1, 0.203922, 0.203922, 0.454902)
+		if temp_building_red:
+			f.modulate = Color(1, 0.203922, 0.203922, 0.454902)
 		temp_buildings.add_child(f)
+		f.z_index = 2
 	#elif collector_selector.selected_button_index != -1:
 	#	var f = collector_selector._get_collector_type().instance()
 	#	f.global_position = self.tile_center_pos
@@ -163,3 +232,19 @@ func _process(delta):
 	for child in temp_buildings.get_children():
 		temp_buildings.remove_child(child)
 	spawn_temp_building()
+	stop = false
+	temp_building_red = false
+	if factory_selector.selected_button_index != -1:
+		var temp_arrays = _fill_temp_tile_array(tile_size_dict[factory_selector.building_dict[factory_selector.selected_button_index]])
+		for node in get_parent().get_node("Placed-Buildings").get_children():
+			if node.name != "Pre-Placement":
+				for building in node.get_children():
+					for i in range(0,building.tiles_placed_on_x.size()):
+						if clicked_cell == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]):
+							stop = true
+							temp_building_red = true
+						
+						for c in range(0,temp_arrays[0].size()):
+							if Vector2(temp_arrays[0][c],temp_arrays[1][c]) == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]) or "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(Vector2(temp_arrays[0][c],temp_arrays[1][c]))):
+								stop = true
+								temp_building_red = true

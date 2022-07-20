@@ -23,6 +23,8 @@ func _ready():
 	self.building_name = "Factory"
 	first_changeable_var = "production_speed"
 	self.change_var_dict = {"firstvar":"production_speed"}
+	tile_rows = 1
+	tile_cols = 1
 	
 
 
@@ -38,6 +40,9 @@ func save():
 		"pos_x" : position.x, # Vector2 is not supported by JSON
 		"pos_y" : position.y,
 		"time_counter": time_counter,
-		"production_speed":production_speed
+		"production_speed":production_speed,
+		"tiles_placed_on_x":tiles_placed_on_x,
+		"tiles_placed_on_y":tiles_placed_on_y,
 	}
+	print(tiles_placed_on_y)
 	return save_dict

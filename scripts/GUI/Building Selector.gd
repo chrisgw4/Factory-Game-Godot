@@ -3,8 +3,8 @@ extends GridContainer
 
 var selected_button_index:int = -1
 
-var dict:Dictionary = {0:"res://scenes/factory/coal_factory/Coal_Factory.tscn", 1:"res://scenes/collectors/Auto-Collector.tscn", 2:"res://scenes/storage buildings/Base Storage.tscn", 3:"res://scenes/conveyors/Conveyor.tscn"}
-var building_dict:Dictionary = {0:"Factory", 1:"Collector", 2:"Storage", 3:"Conveyor"}
+var dict:Dictionary = {0:"res://scenes/factory/coal_factory/Coal_Factory.tscn", 1:"res://scenes/collectors/Auto-Collector.tscn", 2:"res://scenes/storage buildings/Base Storage.tscn", 3:"res://scenes/conveyors/Conveyor.tscn", 4:"res://scenes/hub/Hub.tscn"}
+var building_dict:Dictionary = {0:"Factory", 1:"Collector", 2:"Storage", 3:"Conveyor", 4:"Hub"}
 onready var open_position = self.get_rect().position
 #onready var closed_position = self.get_rect().position+Vector2(150,0)
 var closed:bool = false

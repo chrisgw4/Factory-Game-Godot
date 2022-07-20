@@ -96,6 +96,10 @@ script = ExtResource( 13 )
 
 [node name="Conveyors" type="Node2D" parent="Placed-Buildings"]
 
+[node name="Hub" type="Node2D" parent="Placed-Buildings"]
+
+[node name="Pre-Placement" type="Node2D" parent="Placed-Buildings"]
+
 [node name="Temp-Buildings" type="Node2D" parent="."]
 
 [connection signal="tree_exiting" from="." to="." method="_on_World_tree_exiting"]
