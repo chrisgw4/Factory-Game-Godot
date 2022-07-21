@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://scripts/GUI/Collector Selector.gd" type="Script" id=2]
@@ -14,12 +14,27 @@
 [ext_resource path="res://sprites/gui/code_background.png" type="Texture" id=12]
 [ext_resource path="res://sprites/gui/close_button_bitmap.png" type="BitMap" id=13]
 [ext_resource path="res://scripts/GUI/BuildingCodeBackground.gd" type="Script" id=14]
+[ext_resource path="res://scenes/gui/code_gui/variables_code_text.tscn" type="PackedScene" id=16]
+[ext_resource path="res://scenes/gui/code_gui/class_code_text.tscn" type="PackedScene" id=18]
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="DynamicFontData" id=3]
+resource_local_to_scene = true
+font_path = "res://fonts/dlxfont.ttf"
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="DynamicFont" id=4]
+resource_local_to_scene = true
+size = 32
+use_mipmaps = true
+font_data = SubResource( 3 )
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="DynamicFontData" id=7]
+resource_local_to_scene = true
+font_path = "res://fonts/dlxfont.ttf"
+
+[sub_resource type="DynamicFont" id=8]
+resource_local_to_scene = true
+use_mipmaps = true
+font_data = SubResource( 7 )
 
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 4 )
@@ -215,7 +230,6 @@ polygon = PoolVector2Array( 0, 7.66666, 0, 3, 1, 3, 1, 2, 2, 2, 2, 1, 3, 1, 3, 0
 [node name="Tween" type="Tween" parent="BuildingSelectorBackground"]
 
 [node name="BuildingCodeBackground" type="TextureRect" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 640.0
@@ -227,74 +241,48 @@ rect_pivot_offset = Vector2( 34, 16 )
 texture = ExtResource( 12 )
 script = ExtResource( 14 )
 
-[node name="Tween" type="Tween" parent="BuildingCodeBackground"]
-
-[node name="Class" type="RichTextLabel" parent="BuildingCodeBackground"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildingCodeBackground"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 2.0
 margin_top = 2.0
-margin_right = 306.0
-margin_bottom = 12.0
-rect_scale = Vector2( 0.2, 0.22 )
-custom_colors/default_color = Color( 1, 0.439216, 0.517647, 1 )
-custom_fonts/normal_font = ExtResource( 8 )
-text = "Class:"
-scroll_active = false
+margin_right = 1138.0
+margin_bottom = 530.0
+rect_min_size = Vector2( 1200, 560 )
+rect_scale = Vector2( 0.05, 0.05 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
 
-[node name="BuildingName" type="RichTextLabel" parent="BuildingCodeBackground/Class"]
-margin_left = 49.4444
-margin_right = 304.0
-margin_bottom = 9.0
-custom_colors/default_color = Color( 0.121569, 0.764706, 0.282353, 1 )
-custom_fonts/normal_font = ExtResource( 8 )
-text = "Factory"
-scroll_active = false
+[node name="Class" parent="BuildingCodeBackground/VBoxContainer" instance=ExtResource( 18 )]
+margin_bottom = 33.0
+rect_scale = Vector2( 1, 1 )
+custom_fonts/normal_font = SubResource( 4 )
 
-[node name="FirstVar" type="RichTextLabel" parent="BuildingCodeBackground"]
-margin_left = 1.72222
-margin_top = 5.94444
-margin_right = 307.0
-margin_bottom = 15.0
-rect_scale = Vector2( 0.15, 0.17 )
-custom_colors/default_color = Color( 1, 0.439216, 0.517647, 1 )
-custom_fonts/normal_font = ExtResource( 8 )
-text = "var
-"
-scroll_active = false
+[node name="RichTextLabel" type="RichTextLabel" parent="BuildingCodeBackground/VBoxContainer"]
+margin_top = 48.0
+margin_right = 1200.0
+margin_bottom = 63.0
+fit_content_height = true
 
-[node name="FirstVarToChange2" type="RichTextLabel" parent="BuildingCodeBackground/FirstVar"]
-margin_left = 30.37
-margin_right = 179.0
-margin_bottom = 9.0
-custom_colors/default_color = Color( 0.678431, 0.686275, 0.713726, 1 )
-custom_fonts/normal_font = ExtResource( 8 )
-text = "production_speed =
-"
-scroll_active = false
+[node name="Variable" parent="BuildingCodeBackground/VBoxContainer" instance=ExtResource( 16 )]
+margin_top = 78.0
+margin_right = 1200.0
+margin_bottom = 125.0
+custom_fonts/normal_font = SubResource( 8 )
 
-[node name="FirstVarChangeInput" type="LineEdit" parent="BuildingCodeBackground/FirstVar"]
-margin_left = 181.111
-margin_top = 0.326809
-margin_right = 277.111
-margin_bottom = 8.32681
-custom_colors/font_color = Color( 0.458824, 0.709804, 0.647059, 1 )
-custom_fonts/font = ExtResource( 8 )
-custom_styles/read_only = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/normal = SubResource( 1 )
-text = "213123"
-max_length = 6
-expand_to_text_length = true
-
-[node name="FirstVarDescription" type="RichTextLabel" parent="BuildingCodeBackground"]
-margin_left = 2.0
-margin_top = 8.0
-margin_right = 370.0
-margin_bottom = 18.0
-rect_scale = Vector2( 0.1, 0.11 )
+[node name="FirstVarDescription" type="RichTextLabel" parent="BuildingCodeBackground/VBoxContainer"]
+visible = false
+margin_top = 140.0
+margin_right = 1200.0
+margin_bottom = 157.0
 custom_colors/default_color = Color( 0.32549, 0.333333, 0.32549, 1 )
 custom_fonts/normal_font = ExtResource( 8 )
 text = "# How fast resources are produced (in seconds)"
+fit_content_height = true
 scroll_active = false
 
+[node name="Tween" type="Tween" parent="BuildingCodeBackground"]
+
 [connection signal="pressed" from="BuildingSelectorBackground/CloseButton" to="BuildingSelectorBackground" method="_on_CloseButton_pressed"]
-[connection signal="text_entered" from="BuildingCodeBackground/FirstVar/FirstVarChangeInput" to="BuildingCodeBackground" method="_on_FirstVarChangeInput_text_entered"]
+[connection signal="text_entered" from="BuildingCodeBackground/VBoxContainer/Variable" to="BuildingCodeBackground" method="_on_Variable_text_entered"]

@@ -13,14 +13,17 @@ onready var player = get_parent().get_node("Camera2D")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	randomize()
+	#randomize()
+	#randomize()
+	#randomize()
 	var x = RandomNumberGenerator.new()
-	x.randomize()
-	noise_seed = randi()
+	for i in range(0,100):
+		x.randomize()
+	noise_seed = x.randi()
 	heightMapTexture.width = 512
 	heightMapTexture.height = 512
+	load_chunk_map()
 	if heightMapTexture.noise == null:
-		print('PPPPP')
 		heightMapTexture.noise = OpenSimplexNoise.new()
 		heightMapTexture.noise.seed = noise_seed
 		print("Seed: " + str(heightMapTexture.noise.seed))
@@ -80,6 +83,39 @@ func save():
 	return save_dict
 
 
+func load_chunk_map():
+	
+	var save_game = File.new()
+	if not save_game.file_exists("user://saves/chunk_map.save"):
+		return # Error! We don't have a save to load.
+
+
+
+	# Load the file line by line and process that dictionary to restore
+	# the object it represents.
+	save_game.open("user://saves/chunk_map.save", File.READ)
+   
+	while not save_game.eof_reached():
+		var current_line = parse_json(save_game.get_line())
+		
+		if current_line == null:
+			continue
+		
+		# Firstly, we need to create the object and add it to the tree and set its position.
+		#var new_object = load(current_line["filename"]).instance()
+		#add_child(new_object)
+		#move_child(new_object, 0)
+		#print(new_object.get_position())
+		#new_object.position = Vector2(current_line["pos_x"], current_line["pos_y"])
+		#new_object.direction = Vector2(current_line["direction_x"], current_line["direction_y"])
+		
+		# Now we set the remaining variables.
+		for i in current_line.keys():
+			if i == "filename" or i == "parent" or i == "pos_x" or i == "pos_y" or i == "direction_x" or i == "direction_y":
+				continue
+			self.set(i, current_line[i])
+
+	save_game.close()
 
 
 

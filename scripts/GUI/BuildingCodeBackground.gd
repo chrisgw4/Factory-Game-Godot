@@ -11,6 +11,11 @@ onready var tween = get_node("Tween")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_start_tween_to_close()
+	visible = false
+	#_start_tween_to_open()
+	#get_node("Variable").bbcode_text = "var "
+	#get_node("Variable").append_bbcode("[color=#adafb6]production_speed =[/color]")
+	#print(get_node("Variable").text)
 
 func _process(delta:float):
 	if get_rect().position == close_base_position and visible:
@@ -28,19 +33,23 @@ func _process(delta:float):
 
 
 func _change_first_var(new_var_name):
-	get_node("FirstVar/FirstVarToChange2").text = new_var_name + " ="
-
-	var x = get_node("FirstVar/FirstVarToChange2").get_font("normal_font").get_string_size(new_var_name + " =")
+	#get_node("FirstVar/FirstVarToChange2").text = new_var_name + " ="
+	get_node("VBoxContainer/Variable").bbcode_text = "[color={code/name}]var [/color][color=#adafb6]" + str(new_var_name) + " =[/color]"
 	
-	get_node("FirstVar/FirstVarToChange2").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left
-	get_node("FirstVar").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left+100
+	#var x = get_node("FirstVar/FirstVarToChange2").get_font("normal_font").get_string_size(new_var_name + " =")
 	
-	get_node("FirstVar/FirstVarChangeInput").margin_left = get_node("FirstVar/FirstVarToChange2").margin_right+6
+	#get_node("FirstVar/FirstVarToChange2").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left
+	#get_node("FirstVar").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left+100
 	
+	#get_node("FirstVar/FirstVarChangeInput").margin_left = get_node("FirstVar/FirstVarToChange2").margin_right+6
+	
+func _change_class(new_class_name):
+	get_node("VBoxContainer/Class").bbcode_text = "[color=#ff7084]Class:[/color] [color=#1fc348]"+new_class_name+"[/color]"
 
 func _change_first_var_desc(new_var_desc):
-	new_var_desc = "# " + new_var_desc
-	get_node("FirstVarDescription").text = new_var_desc
+	pass
+	#new_var_desc = "# " + new_var_desc
+	#get_node("FirstVarDescription").text = new_var_desc
 
 
 func _on_FirstVarChangeInput_text_entered(new_text):
@@ -60,13 +69,19 @@ func _start_tween_to_open():
 		_type_letters()
 
 func _type_letters():
-	for node in get_children():
+	for node in get_child(0).get_children():
 		if node.name != "Tween":
 			if node.get_child_count()>0:
 				for node2 in node.get_children():
 					if node2.name != "FirstVarChangeInput" and node2.get_class() == "RichTextLabel":
-						tween.interpolate_property(node2, "visible_characters", 0, len(node2.text), .7, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-					if node2.name == "FirstVarChangeInput":
-						tween.interpolate_property(node2, "visible", false, true, 1.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+						tween.interpolate_property(node2, "visible_characters", 0, len(node2.text), 1.8, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+					if node2.name == "VariableInput":
+						tween.interpolate_property(node2, "visible", false, true, 1.8, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 						
-			tween.interpolate_property(node, "visible_characters", 0, len(node.text), .7, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+			tween.interpolate_property(node, "visible_characters", 0, len(node.text), .9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+
+
+func _on_Variable_text_entered():
+	print($VBoxContainer/Variable.input_text)
+	if building != null and $VBoxContainer/Variable.input_text.is_valid_float():
+		building.set(building.change_var_dict["firstvar"], $VBoxContainer/Variable.input_text)

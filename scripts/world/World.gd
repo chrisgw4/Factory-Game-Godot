@@ -48,8 +48,10 @@ func _save_game():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_create_or_load_save()
+	
+	#load_chunk_map()
 	factories.load_factories()
-	load_chunk_map()
+	
 	#_load_tile_world()
 
 
@@ -118,7 +120,7 @@ func unselect_all():
 	for node in get_node("Placed-Buildings").get_children():
 		for n in node.get_children():
 			n.selected = false
-	
+	$"GUI/BuildingSelectorBackground/ScrollContainer/Factory Selector".selected_button_index = -1
 	update()
 
 
@@ -281,7 +283,7 @@ func load_chunk_map():
 			if i == "filename" or i == "parent" or i == "pos_x" or i == "pos_y" or i == "direction_x" or i == "direction_y":
 				continue
 			new_object.set(i, current_line[i])
-	
+	print(str(get_child(0).noise_seed) + " SSDDS")
 	save_game.close()
 
 func _save_tile_world():

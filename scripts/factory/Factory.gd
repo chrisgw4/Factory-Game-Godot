@@ -44,5 +44,4 @@ func save():
 		"tiles_placed_on_x":tiles_placed_on_x,
 		"tiles_placed_on_y":tiles_placed_on_y,
 	}
-	print(tiles_placed_on_y)
 	return save_dict

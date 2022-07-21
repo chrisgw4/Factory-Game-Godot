@@ -5,11 +5,11 @@ var tile_center_pos = null
 
 onready var factory_selector = get_parent().get_node("GUI/BuildingSelectorBackground/ScrollContainer/Factory Selector")
 onready var collector_selector = self.get_parent().get_node("GUI/Collector Selector")
-onready var first_change_var_input = get_parent().get_node("GUI/BuildingCodeBackground/FirstVar/FirstVarChangeInput")
+onready var first_change_var_input = get_parent().get_node("GUI/BuildingCodeBackground/VBoxContainer/Variable/VariableInput")
 onready var building_code_background = get_parent().get_node("GUI/BuildingCodeBackground")
 
 
-onready var building_name_code_gui = get_parent().get_node("GUI/BuildingCodeBackground/Class/BuildingName")
+onready var building_name_code_gui = get_parent().get_node("GUI/BuildingCodeBackground/Class")
 
 onready var temp_buildings = get_parent().get_node("Temp-Buildings")
 
@@ -52,7 +52,8 @@ func _unhandled_input(event):
 						first_change_var_input.text = str(placed_object.production_speed)
 						
 						#building_code_background.visible = !building_code_background.visible
-						building_name_code_gui.text = placed_object.building_name
+						#building_name_code_gui.text = placed_object.building_name
+						building_code_background._change_class(placed_object.building_name)
 						building_code_background.building = placed_object
 						
 						if placed_object.selected:
@@ -111,7 +112,7 @@ func _spawn_building():
 	
 	var f = factory_selector._get_building_type()
 	f = f.instance()
-	print(f.name)
+	#print(f.name)
 	f.global_position = self.tile_center_pos
 	
 	
