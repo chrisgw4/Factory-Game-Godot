@@ -211,6 +211,9 @@ func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
 
 func _on_World_tree_exiting():
 	pass
+	#var packed_scene = PackedScene.new()
+	#packed_scene.pack(get_child(0))
+	#ResourceSaver.save("res://my_scene.tscn", packed_scene)
 	_save_game()
 	factories.save_factories()
 	save_chunk_map()

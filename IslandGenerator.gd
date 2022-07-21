@@ -1,42 +1,76 @@
 extends TileMap
 
 
-export(int) var chunk_width = 8
-export(int) var chunk_height = 8
-var heightMapTexture = NoiseTexture.new()
+
+export(int) var chunk_width = 1024
+export(int) var chunk_height = 1024
+
+export(NoiseTexture) var island_map #= NoiseTexture.new()
+export(NoiseTexture) var moisture_map = NoiseTexture.new()
 
 var noise_seed = 0
+var moisture_seed = 0
 
 
 
-onready var player = get_parent().get_node("Camera2D")
+#onready var player = get_parent().get_node("Camera2D")
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#randomize()
-	#randomize()
+	randomize()
+	randomize()
 	#randomize()
 	var x = RandomNumberGenerator.new()
-	for i in range(0,100):
+	for i in range(0,x.randi_range(0,1000)):
 		x.randomize()
-	noise_seed = x.randi()
-	heightMapTexture.width = 2048
-	heightMapTexture.height = 2048
-	load_chunk_map()
-	if heightMapTexture.noise == null:
-		
-		heightMapTexture.noise = OpenSimplexNoise.new()
-		heightMapTexture.noise.octaves = 9
-		# persistence 10 makes it look like circuit board
-		heightMapTexture.noise.persistence = .7
-		heightMapTexture.noise.seed = noise_seed
-		heightMapTexture.bump_strength = 8
-		heightMapTexture.as_normalmap = true
-		
-		print("Seed: " + str(heightMapTexture.noise.seed))
+	#noise_seed = x.randi()
 	
+	#island_map.width = 1024
+	#island_map.height = 1024
+	moisture_map.width = 1024
+	moisture_map.height = 1024
+	
+	#load_chunk_map()
+	print(island_map.noise.seed)
+	#print(str(noise_seed) + 'post load')
+	if island_map.noise == null:
+		
+		#island_map.noise = $Sprite.texture#OpenSimplexNoise.new()
+		#var array = [-761570065,-1593051044,1549115969]
+		#island_map.noise.octaves = 9
+		#if noise_seed == 0:
+		#	island_map.noise.seed = array[x.randi_range(0,2)]
+		#else:
+		#	island_map.noise.seed = noise_seed
+		#-761570065
+		# -1593051044
+		# 1549115969
+		
+
+		#island_map.noise.period = 96
+		
+		
+		
+		moisture_map.noise = OpenSimplexNoise.new()
+		moisture_map.noise.octaves = 9
+		moisture_map.noise.period = 96
+		moisture_map.noise.lacunarity = 3
+		x.randomize()
+		if (moisture_seed == 0):
+			moisture_seed = x.randi_range(0, x.randi())
+		
+		moisture_map.noise.seed = moisture_seed
+		
+		
+		print("Seed: " + str(moisture_map.noise.seed))
+		# 208592196
+
+
+	
+
 	generateGridChunk(Vector2(0,0))
+	
 	#setGridChunk(0,chunk_width, 0, chunk_height)
 	
 
@@ -65,23 +99,30 @@ func setGridChunk(columnStart, columnEnd, rowStart, rowEnd):
 	
 	for mx in range(rowStart, rowEnd):
 		for my in range(columnStart, columnEnd):
-			var noise_value:float = heightMapTexture.noise.get_noise_2d(mx,my)
-			var weight:float = (noise_value+1.0)/1.7
-			var height:float = floor(lerp(-1,6,weight))*1
+			var noise_value:float = island_map.noise.get_noise_2d(mx+island_map.noise_offset.x,my+island_map.noise_offset.y)
+			#var moisture_value = moisture_map.noise.get_noise_2d(mx,my)
 			
-			#if height < 0:
-				#print(height)
-				#height = 2
-			#if height == 0:
-				#print("000000")
+			var weight:float = ((noise_value) )#- moisture_value)
+			var height:float = floor(lerp(0,6,weight)*1.0)
+			
+			#for mz in range(0,height):
+			
+			#print(height)
+			if height < 0:
+				height = 0
 			set_cellv(Vector2(mx,my),floor(height))
-			
+	
+
 
 
 func _on_MapUpdateTimer_timeout():
-	#generateGridChunk(player.position)
-	if noise_seed != heightMapTexture.noise.seed:
-		heightMapTexture.noise.seed = noise_seed
+	#generateGridChunk(Vector2(0,0))
+	if noise_seed != island_map.noise.seed:
+		island_map.noise.seed = noise_seed
+		print(noise_seed)
+	if moisture_seed != moisture_map.noise.seed:
+		moisture_map.noise.seed = moisture_seed
+		print(moisture_seed)
 
 
 func save():
@@ -91,6 +132,7 @@ func save():
 		"noise_seed" : noise_seed,
 		"chunk_width" : chunk_width,
 		"chunk_height" : chunk_height,
+		"moisture_seed" : moisture_seed
 	}
 	return save_dict
 
@@ -126,6 +168,8 @@ func load_chunk_map():
 			if i == "filename" or i == "parent" or i == "pos_x" or i == "pos_y" or i == "direction_x" or i == "direction_y":
 				continue
 			self.set(i, current_line[i])
+			if i =="moisture_seed":
+				print(current_line[i])
 
 	save_game.close()
 

@@ -1,18 +1,14 @@
-[gd_scene load_steps=11 format=2]
+[gd_resource type="TileSet" load_steps=6 format=2]
 
 [ext_resource path="res://sprites/tilemap/grass32x32.png" type="Texture" id=1]
 [ext_resource path="res://sprites/tilemap/water32x32.png" type="Texture" id=2]
 [ext_resource path="res://sprites/tilemap/sand32x32.png" type="Texture" id=3]
-[ext_resource path="res://scripts/world/Chunk TileMap.gd" type="Script" id=4]
+[ext_resource path="res://sprites/tilemap/snow32x32.png" type="Texture" id=4]
 [ext_resource path="res://sprites/tilemap/stone32x32.png" type="Texture" id=5]
-[ext_resource path="res://sprites/tilemap/snow32x32.png" type="Texture" id=6]
-[ext_resource path="res://sprites/tilemap/dark_grass32x32.png" type="Texture" id=7]
-[ext_resource path="res://sprites/tilemap/light_grass32x32.png" type="Texture" id=8]
-[ext_resource path="res://sprites/tilemap/mud32x32.png" type="Texture" id=9]
 
-[sub_resource type="TileSet" id=1]
-0/name = "grass32x32.png 0"
-0/texture = ExtResource( 1 )
+[resource]
+0/name = "water32x32.png 0"
+0/texture = ExtResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 32, 32 )
@@ -39,8 +35,8 @@
 1/shape_one_way_margin = 0.0
 1/shapes = [  ]
 1/z_index = 0
-2/name = "water32x32.png 2"
-2/texture = ExtResource( 2 )
+2/name = "grass32x32.png 2"
+2/texture = ExtResource( 1 )
 2/tex_offset = Vector2( 0, 0 )
 2/modulate = Color( 1, 1, 1, 1 )
 2/region = Rect2( 0, 0, 32, 32 )
@@ -68,7 +64,7 @@
 3/shapes = [  ]
 3/z_index = 0
 4/name = "snow32x32.png 4"
-4/texture = ExtResource( 6 )
+4/texture = ExtResource( 4 )
 4/tex_offset = Vector2( 0, 0 )
 4/modulate = Color( 1, 1, 1, 1 )
 4/region = Rect2( 0, 0, 32, 32 )
@@ -81,60 +77,3 @@
 4/shape_one_way_margin = 0.0
 4/shapes = [  ]
 4/z_index = 0
-5/name = "dark_grass32x32.png 5"
-5/texture = ExtResource( 7 )
-5/tex_offset = Vector2( 0, 0 )
-5/modulate = Color( 1, 1, 1, 1 )
-5/region = Rect2( 0, 0, 32, 32 )
-5/tile_mode = 0
-5/occluder_offset = Vector2( 0, 0 )
-5/navigation_offset = Vector2( 0, 0 )
-5/shape_offset = Vector2( 0, 0 )
-5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-5/shape_one_way = false
-5/shape_one_way_margin = 0.0
-5/shapes = [  ]
-5/z_index = 0
-6/name = "mud32x32.png 6"
-6/texture = ExtResource( 9 )
-6/tex_offset = Vector2( 0, 0 )
-6/modulate = Color( 1, 1, 1, 1 )
-6/region = Rect2( 0, 0, 32, 32 )
-6/tile_mode = 0
-6/occluder_offset = Vector2( 0, 0 )
-6/navigation_offset = Vector2( 0, 0 )
-6/shape_offset = Vector2( 0, 0 )
-6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-6/shape_one_way = false
-6/shape_one_way_margin = 0.0
-6/shapes = [  ]
-6/z_index = 0
-7/name = "light_grass32x32.png 7"
-7/texture = ExtResource( 8 )
-7/tex_offset = Vector2( 0, 0 )
-7/modulate = Color( 1, 1, 1, 1 )
-7/region = Rect2( 0, 0, 32, 32 )
-7/tile_mode = 0
-7/occluder_offset = Vector2( 0, 0 )
-7/navigation_offset = Vector2( 0, 0 )
-7/shape_offset = Vector2( 0, 0 )
-7/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-7/shape_one_way = false
-7/shape_one_way_margin = 0.0
-7/shapes = [  ]
-7/z_index = 0
-
-[node name="Chunk TileMap" type="TileMap"]
-z_index = -16
-tile_set = SubResource( 1 )
-cell_size = Vector2( 32, 32 )
-format = 1
-script = ExtResource( 4 )
-chunk_width = 64
-chunk_height = 64
-
-[node name="MapUpdateTimer" type="Timer" parent="."]
-wait_time = 0.1
-autostart = true
-
-[connection signal="timeout" from="MapUpdateTimer" to="." method="_on_MapUpdateTimer_timeout"]

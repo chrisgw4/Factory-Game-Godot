@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/gui/GUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/world/World.gd" type="Script" id=2]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://sprites/tilemap/iron.png" type="Texture" id=4]
 [ext_resource path="res://scripts/world/world_tilemap.gd" type="Script" id=5]
+[ext_resource path="res://scenes/all_tiles_32.tres" type="TileSet" id=6]
 [ext_resource path="res://scripts/Camera/CameraController.gd" type="Script" id=9]
 [ext_resource path="res://sprites/tilemap/grass.png" type="Texture" id=10]
 [ext_resource path="res://sprites/tilemap/sand.png" type="Texture" id=11]
@@ -74,8 +75,9 @@
 script = ExtResource( 2 )
 
 [node name="Chunk TileMap" parent="." instance=ExtResource( 14 )]
-cell_quadrant_size = 128
-chunk_width = 86
+tile_set = ExtResource( 6 )
+chunk_width = 512
+chunk_height = 512
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

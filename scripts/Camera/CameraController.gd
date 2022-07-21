@@ -1,7 +1,7 @@
 extends Camera2D
 
 var zoom_min:Vector2 = Vector2(0.2,0.2)
-var zoom_max:Vector2 = Vector2(2.0,2.0)
+var zoom_max:Vector2 = Vector2(16.0,16.0)
 var zoom_speed:Vector2 = Vector2(0.2,0.2)
 
 
@@ -29,6 +29,7 @@ func zoom_at_point(zoom_change, point):
 
 	c1 = c0 + (-0.5*v0 + point)*(z0 - z1)
 	if z1 > zoom_min and z1 < zoom_max:
+		#print(zoom)
 		zoom = z1
 		global_position = c1
 
@@ -65,6 +66,14 @@ func move_camera(delta:float):
 	
 	self.position.x = clamp(self.position.x, left, right)
 	self.position.y = clamp(self.position.y, top, bottom)
+	
+	
+	var mouse_position = get_local_mouse_position()#get_local_mouse_position()+self.position
+	if Input.is_action_just_pressed("ui_up"):
+		zoom_at_point(zoom_step,mouse_position)
+		#Input.action_press(BUTTON_WHEEL_DOWN)
+	elif Input.is_action_just_pressed("ui_down"):
+		zoom_at_point(1/zoom_step,mouse_position)
 	
 	
 	
