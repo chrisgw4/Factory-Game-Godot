@@ -217,6 +217,7 @@ func _on_World_tree_exiting():
 	_save_game()
 	factories.save_factories()
 	save_chunk_map()
+	
 	#print("OWEOIU")
 	#_save_tile_world()
 	#_save_game()
@@ -243,6 +244,8 @@ func save_chunk_map():
 	save_game.store_line(to_json(node_data))
 	
 	save_game.close()
+
+
 
 func load_chunk_map():
 	"""

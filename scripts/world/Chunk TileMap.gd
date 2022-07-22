@@ -7,22 +7,31 @@ var heightMapTexture = NoiseTexture.new()
 
 var noise_seed = 0
 
+var img :Image = Image.new()
+
 
 
 onready var player = get_parent().get_node("Camera2D")
 
+var ore_map
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#randomize()
 	#randomize()
 	#randomize()
+	
+	#img.load("res://sprites/tilemap/sqaure_gradient.png")
+	#img.resize(16384,16384)
+	#img.lock()
+	
 	var x = RandomNumberGenerator.new()
 	for i in range(0,100):
 		x.randomize()
 	noise_seed = x.randi()
 	heightMapTexture.width = 2048
 	heightMapTexture.height = 2048
+	
 	load_chunk_map()
 	if heightMapTexture.noise == null:
 		
@@ -31,12 +40,13 @@ func _ready():
 		# persistence 10 makes it look like circuit board
 		heightMapTexture.noise.persistence = .7
 		heightMapTexture.noise.seed = noise_seed
-		heightMapTexture.bump_strength = 8
+		heightMapTexture.bump_strength = 1
 		heightMapTexture.as_normalmap = true
 		
 		print("Seed: " + str(heightMapTexture.noise.seed))
 	
 	generateGridChunk(Vector2(0,0))
+	_generate_ores()
 	#setGridChunk(0,chunk_width, 0, chunk_height)
 	
 
@@ -66,14 +76,18 @@ func setGridChunk(columnStart, columnEnd, rowStart, rowEnd):
 	for mx in range(rowStart, rowEnd):
 		for my in range(columnStart, columnEnd):
 			var noise_value:float = heightMapTexture.noise.get_noise_2d(mx,my)
-			var weight:float = (noise_value+1.0)/1.7
-			var height:float = floor(lerp(-1,6,weight))*1
+			#var gradient_value = img.get_pixel(mx,my)
+			#print(img.get_pixel(0,0))
+			#print(img.get_pixel(img.get_width()/2,img.get_width()/2))
+			#var weight = 0
+			#if gradient_value[0] > .7:
+			#	weight = (noise_value+1.0-gradient_value[0])/1.7#1.7#/1.7
+			#else:
+			var weight:float = (noise_value+1.0)/1.7#1.7#/1.7		
 			
-			#if height < 0:
-				#print(height)
-				#height = 2
-			#if height == 0:
-				#print("000000")
+			var height:float = floor(lerp(0,3,weight))*1
+			
+			
 			set_cellv(Vector2(mx,my),floor(height))
 			
 
@@ -82,6 +96,34 @@ func _on_MapUpdateTimer_timeout():
 	#generateGridChunk(player.position)
 	if noise_seed != heightMapTexture.noise.seed:
 		heightMapTexture.noise.seed = noise_seed
+
+
+
+func _generate_ores():
+	var chunk_start_x = -8196#0-chunk_width
+	var chunk_start_y = 0-chunk_width
+	var chunk_stop_x = 0+chunk_width/2
+	var chunk_stop_y = 0+chunk_width/2
+	var chances = 4
+	var rng = RandomNumberGenerator.new()
+	var ore_size = rng.randi_range(0,4)
+	
+	var num_chunks = (512*512)/32
+	for i in range(0,1):
+		# there are 8 chunks on each X axis row so 8192/1024 = 8
+		for x_block in range(0,num_chunks/chunk_width):
+			for y_block in range(0,num_chunks/chunk_height):
+				for p in range(0,chances):
+					var pos = Vector2(chunk_start_x+x_block*32, chunk_start_y+y_block*32)
+					
+					pos = map_to_world(world_to_map(pos))+cell_size/2
+					var temp = load("res://scenes/ores/Iron.tscn").instance()
+					temp.position = pos
+					self.add_child(temp)
+					temp.z_index = 10
+					print(pos)
+
+
 
 
 func save():

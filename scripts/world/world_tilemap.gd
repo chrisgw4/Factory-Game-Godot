@@ -231,7 +231,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for child in temp_buildings.get_children():
-		temp_buildings.remove_child(child)
+		child.queue_free()
+		#temp_buildings.remove_child(child)
 	spawn_temp_building()
 	stop = false
 	temp_building_red = false
