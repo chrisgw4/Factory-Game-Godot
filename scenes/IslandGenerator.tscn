@@ -1,0 +1,107 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://IslandGenerator.gd" type="Script" id=1]
+[ext_resource path="res://scenes/all_tiles_tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://scenes/factory/coal_factory/Coal_Factory.tscn" type="PackedScene" id=7]
+
+[sub_resource type="OpenSimplexNoise" id=3]
+seed = 6
+octaves = 9
+
+[sub_resource type="NoiseTexture" id=4]
+noise = SubResource( 3 )
+noise_offset = Vector2( -500, 250 )
+
+[sub_resource type="OpenSimplexNoise" id=7]
+octaves = 9
+
+[sub_resource type="NoiseTexture" id=8]
+noise = SubResource( 7 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Camera2D
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if Input.is_action_pressed(\"ui_up\"):
+		zoom-=Vector2(.2,.2)
+	if Input.is_action_pressed(\"ui_down\"):
+		zoom+=Vector2(.2,.2)
+"
+
+[sub_resource type="OpenSimplexNoise" id=5]
+seed = 6
+octaves = 9
+
+[sub_resource type="NoiseTexture" id=6]
+noise = SubResource( 5 )
+noise_offset = Vector2( -500, 250 )
+
+[sub_resource type="Gradient" id=9]
+offsets = PoolRealArray( 0, 0.351675, 0.643541, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
+width = 512
+
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0, 0, 0.961722, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1, 0.943416, 0.943416, 0.943416, 1, 0.755981, 0.755981, 0.755981, 1 )
+
+[sub_resource type="GradientTexture" id=12]
+resource_local_to_scene = true
+gradient = SubResource( 11 )
+
+[node name="IslandGenerator" type="TileMap"]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 32, 32 )
+format = 1
+script = ExtResource( 1 )
+chunk_width = 512
+chunk_height = 512
+island_map = SubResource( 4 )
+moisture_map = SubResource( 8 )
+
+[node name="MapUpdateTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+visible = false
+current = true
+zoom = Vector2( 24, 24 )
+script = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+visible = false
+texture = SubResource( 6 )
+
+[node name="Coal_Factory" parent="." instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 82, 54 )
+z_index = 3
+
+[node name="Sprite2" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, 255 )
+scale = Vector2( 1, 655 )
+texture = SubResource( 10 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, 255 )
+rotation = 1.5708
+scale = Vector2( 1, 655 )
+texture = SubResource( 12 )
