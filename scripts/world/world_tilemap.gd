@@ -29,19 +29,16 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			temp_building_red = false
-			# event.position works with the scaling of the window
-			#self.clicked_cell = world_to_map(event.position+camera.global_position)
-			#self.tile_center_pos = map_to_world(self.clicked_cell) + cell_size / 2
+			
+			
+			
 			get_tile_at_mouse_pos()
-			# finds if an object is placed in the tile that is clicked
+			# finds if a building is placed in the tile that is clicked
 			for node in get_parent().get_node("Placed-Buildings").get_children():
 				for placed_object in node.get_children():
-					#if node.name == "Factories":
 					
 					# this line makes it so when you click anywhere not in a menu, it makes every "selected" part in the object = to false
 					#placed_object.selected = false
-					
-			#for factory in get_parent().get_node("Placed-Buildings/Factories").get_children():
 					if placed_object.entered and Input.is_action_just_pressed("click"):#placed_object.global_position.x-placed_object.size.x >= tile_center_pos.x and tile_center_pos.x <= placed_object.global_position.x+placed_object.size.x:#tile_center_pos > map_to_world(world_to_map(placed_object.global_position-placed_object.size)) and tile_center_pos < map_to_world(world_to_map(placed_object.global_position+placed_object.size)) : #world_to_map(placed_object.global_position - placed_object.size) <= world_to_map(tile_center_pos)  or world_to_map(tile_center_pos) >= world_to_map(placed_object.global_position+placed_object.size)  : #world_to_map(placed_object.global_position) == clicked_cell or #placed_object.global_position == self.tile_center_pos:
 						
 						# when a placed object in Placed-Buildings is clicked, it will update World scene to draw the radius and show gui
@@ -51,8 +48,6 @@ func _unhandled_input(event):
 						building_code_background._change_first_var(placed_object.first_changeable_var)
 						first_change_var_input.text = str(placed_object.production_speed)
 						
-						#building_code_background.visible = !building_code_background.visible
-						#building_name_code_gui.text = placed_object.building_name
 						building_code_background._change_class(placed_object.building_name)
 						building_code_background.building = placed_object
 						
@@ -62,9 +57,10 @@ func _unhandled_input(event):
 							building_code_background._start_tween_to_close()
 						
 						
-						
+						# parent gets updated to draw the circle radius around building
 						get_parent().update()
 						
+						# deselects all other buildings than the one that is clicked
 						for node2 in get_parent().get_node("Placed-Buildings").get_children():
 							for placed_object2 in node2.get_children():
 								if placed_object2 != placed_object:
@@ -72,25 +68,6 @@ func _unhandled_input(event):
 							
 						return
 			
-			# variable used to determine if code should stop from placing down a building
-			#var stop = false
-			#var temp_arrays = _fill_temp_tile_array(tile_size_dict[factory_selector.building_dict[factory_selector.selected_button_index]])
-			#for node in get_parent().get_node("Placed-Buildings").get_children():
-			#	if node.name != "Pre-Placement":
-			#		for building in node.get_children():
-			#			for i in range(0,building.tiles_placed_on_x.size()):
-			#				if clicked_cell == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]):
-			#					stop = true
-			#					temp_building_red = true
-			#				
-			#				for c in range(0,temp_arrays[0].size()):
-			#					if Vector2(temp_arrays[0][c],temp_arrays[1][c]) == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]):
-			#						stop = true
-			#						temp_building_red = true
-								
-							#if  in building.tiles_placed_on_x[i]:
-							#	stop = true
-							#	temp_building_red = true
 			
 			if not "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(clicked_cell)) and not stop:
 				if factory_selector.selected_button_index != -1:
@@ -103,52 +80,33 @@ func _spawn_building():
 		return
 	
 	
-			
-	
-	#var f = factory_selector._get_building_type()
-		
-	#f = f.instance()
-	#f.global_position = self.tile_center_pos
-	
 	var f = factory_selector._get_building_type()
 	f = f.instance()
-	#print(f.name)
 	f.global_position = self.tile_center_pos
 	
 	
 	
 	if(factory_selector.building_dict[factory_selector.selected_button_index] == "Factory"):
-		
-		
 		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
 		
-		
 	elif(factory_selector.building_dict[factory_selector.selected_button_index] == "Collector"):
-		#var f = factory_selector._get_building_type().instance()
-		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Auto-Collectors").add_child(f)
 		
 		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Storage"):
-		#var f = factory_selector._get_building_type().instance()
-		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Storages").add_child(f)
 		
 		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Conveyor"):
-		#var f = factory_selector._get_building_type().instance()
-		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Conveyors").add_child(f)
 		
-		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Hub"):
-		#var f = factory_selector._get_building_type().instance()
-		#f.global_position = self.tile_center_pos
 		self.get_parent().get_node("Placed-Buildings/Hub").add_child(f)
 
 	_fill_building_tile_array(f)
 
 
+# fills array with the tiles that the building occupies
 func _fill_building_tile_array(building):
 	#var tile_pos = Vector2(10,10)
 	for r in range(0,building.tile_rows):

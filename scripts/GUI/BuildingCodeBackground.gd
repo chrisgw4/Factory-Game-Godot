@@ -32,17 +32,12 @@ func _process(delta:float):
 		self.visible = true
 
 
+# changes the first variable's name on the code background
 func _change_first_var(new_var_name):
 	#get_node("FirstVar/FirstVarToChange2").text = new_var_name + " ="
 	get_node("VBoxContainer/Variable").bbcode_text = "[color={code/name}]var [/color][color=#adafb6]" + str(new_var_name) + " =[/color]"
-	
-	#var x = get_node("FirstVar/FirstVarToChange2").get_font("normal_font").get_string_size(new_var_name + " =")
-	
-	#get_node("FirstVar/FirstVarToChange2").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left
-	#get_node("FirstVar").margin_right = x.x+get_node("FirstVar/FirstVarToChange2").margin_left+100
-	
-	#get_node("FirstVar/FirstVarChangeInput").margin_left = get_node("FirstVar/FirstVarToChange2").margin_right+6
-	
+
+# changes the name of the class on the code background
 func _change_class(new_class_name):
 	get_node("VBoxContainer/Class").bbcode_text = "[color=#ff7084]Class:[/color] [color=#1fc348]"+new_class_name+"[/color]"
 
@@ -52,6 +47,7 @@ func _change_first_var_desc(new_var_desc):
 	#get_node("FirstVarDescription").text = new_var_desc
 
 
+# called when the first variable's text box recieves a new text and changes the variable of the building to reflect the change
 func _on_FirstVarChangeInput_text_entered(new_text):
 	if building != null and new_text.is_valid_float():
 		building.set(building.change_var_dict["firstvar"], new_text)

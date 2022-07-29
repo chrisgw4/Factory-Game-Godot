@@ -40,22 +40,6 @@ func setGridChunk(columnStart, columnEnd, rowStart, rowEnd):
 			temp.position = Vector2(0,0)
 			self.add_child(temp)
 			
-			#print(pos)
-			#get_parent().get_node("Camera2D").position = temp.position
-			
-	#for f in range(0,100):
-				
-	#for mx in range(rowStart, rowEnd):
-		#for my in range(columnStart, columnEnd):
-			
-			#var noise_value:float = heightMapTexture.noise.get_noise_2d(mx,my)
-			
-			#print(noise_value)
-			#var weight:float = (noise_value+1.0)/1.4#/1.7#1.7#/1.7		
-			
-			#var height:float = floor(lerp(-1,2,weight))*1
-			
-			#set_cellv(Vector2(mx,my),floor(height))
 			
 
 

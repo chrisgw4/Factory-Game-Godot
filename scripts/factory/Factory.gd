@@ -11,8 +11,18 @@ var RNG:RandomNumberGenerator = RandomNumberGenerator.new()
 var payment: String = ""
 
 
-#var selected: bool = false
+# increments the time counter and when it reaches the production time it will spew out a resource
+func _update_time_counter(delta):
+	time_counter += delta
+		
+	if time_counter >= production_speed:
+		if get_parent().get_parent().get_parent().get_node("Resources").get_child_count() < 8000:
+			spawn_resource()
+			time_counter -= production_speed
 
+
+func _process(delta):
+	_update_time_counter(delta)
 
 
 
@@ -27,10 +37,36 @@ func _ready():
 	tile_cols = 1
 	
 
-
+# spawns the produced resource after time counter reaches/surpasses the production speed and spawn the resource in a radius around the building
 func spawn_resource():
 	if self.produced_resource == "":
 		return
+	if self.produced_resource == null:
+		return
+	self.RNG.randomize()
+	
+	var res = load(produced_resource)
+	var resource = res.instance()
+	
+	var tween = resource.get_node("Tween")
+	
+	while resource.go_position == Vector2(0,0) or self.global_position.distance_to(resource.go_position) > 40:
+		resource.go_position.x = self.global_position.x+RNG.randi_range(-self.radius,self.radius)
+		resource.go_position.y = self.global_position.y+RNG.randi_range(-self.radius,self.radius)
+	
+	resource.global_position = self.global_position
+	
+	#tween.interpolate_property(resource, "position",
+	#	self.global_position, resource.go_position, .05,
+	#	Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	#tween.start()
+	
+	self.get_parent().get_parent().get_parent().get_node("Resources").add_child(resource)
+	
+	resource.tween.interpolate_property(resource, "position",
+		self.global_position, resource.go_position, .15,
+		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()
 	
 
 func save():

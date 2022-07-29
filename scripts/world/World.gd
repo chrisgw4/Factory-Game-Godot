@@ -52,19 +52,6 @@ func _ready():
 	#load_chunk_map()
 	factories.load_factories()
 	
-	#_load_tile_world()
-
-
-
-
-func _update_factories(delta:float):
-	for f in factories.get_children():
-		f.time_counter += delta
-		
-		if f.time_counter >= f.production_speed:
-			if resources.get_child_count() < 8000:
-				f.spawn_resource()
-				f.time_counter -= f.production_speed
 
 
 
@@ -132,7 +119,6 @@ func _process(delta):
 	
 	_collect_resources(mouse_coords, delta)
 	
-	_update_factories(delta)
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.stats.collected_resources[0]) + '\n' + "Iron: " + str(player.stats.collected_resources[1]) 
 	resources_text.text += "\n" + "Coal On Screen: " + str(resources.get_child_count())
@@ -208,7 +194,7 @@ func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
 	draw_polygon(points_arc, colors)
 
 
-
+# when closing out of game it saves
 func _on_World_tree_exiting():
 	pass
 	#var packed_scene = PackedScene.new()
