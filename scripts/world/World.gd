@@ -113,11 +113,11 @@ func unselect_all():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var mouse_coords = get_local_mouse_position()#get_global_mouse_position()#get_viewport().get_mouse_position()
+	#var mouse_coords = get_local_mouse_position()#get_global_mouse_position()#get_viewport().get_mouse_position()
 	
 	camera.move_camera(delta)
 	
-	_collect_resources(mouse_coords, delta)
+	#_collect_resources(mouse_coords, delta)
 	
 	
 	resources_text.text = "FPS: " + str(Engine.get_frames_per_second()) + "\n" + "Coal: " + str(player.stats.collected_resources[0]) + '\n' + "Iron: " + str(player.stats.collected_resources[1]) 
@@ -203,6 +203,7 @@ func _on_World_tree_exiting():
 	_save_game()
 	factories.save_factories()
 	save_chunk_map()
+	_chunk_tile_map.get_node("Ores").save_ores()
 	
 	#print("OWEOIU")
 	#_save_tile_world()

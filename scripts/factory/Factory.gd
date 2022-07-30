@@ -26,6 +26,7 @@ func _process(delta):
 
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#pass # Replace with function body.
@@ -36,6 +37,9 @@ func _ready():
 	tile_rows = 1
 	tile_cols = 1
 	
+
+func _update_var_dict():
+	self.var_dict = {0:production_speed}
 
 # spawns the produced resource after time counter reaches/surpasses the production speed and spawn the resource in a radius around the building
 func spawn_resource():

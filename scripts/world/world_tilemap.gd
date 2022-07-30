@@ -39,16 +39,19 @@ func _unhandled_input(event):
 					
 					# this line makes it so when you click anywhere not in a menu, it makes every "selected" part in the object = to false
 					#placed_object.selected = false
-					if placed_object.entered and Input.is_action_just_pressed("click"):#placed_object.global_position.x-placed_object.size.x >= tile_center_pos.x and tile_center_pos.x <= placed_object.global_position.x+placed_object.size.x:#tile_center_pos > map_to_world(world_to_map(placed_object.global_position-placed_object.size)) and tile_center_pos < map_to_world(world_to_map(placed_object.global_position+placed_object.size)) : #world_to_map(placed_object.global_position - placed_object.size) <= world_to_map(tile_center_pos)  or world_to_map(tile_center_pos) >= world_to_map(placed_object.global_position+placed_object.size)  : #world_to_map(placed_object.global_position) == clicked_cell or #placed_object.global_position == self.tile_center_pos:
+					#print(placed_object.tiles_occupied_by_self)
+					if Input.is_action_just_pressed("click") and clicked_cell in placed_object.tiles_occupied_by_self:
+					#if placed_object.entered and Input.is_action_just_pressed("click"):#placed_object.global_position.x-placed_object.size.x >= tile_center_pos.x and tile_center_pos.x <= placed_object.global_position.x+placed_object.size.x:#tile_center_pos > map_to_world(world_to_map(placed_object.global_position-placed_object.size)) and tile_center_pos < map_to_world(world_to_map(placed_object.global_position+placed_object.size)) : #world_to_map(placed_object.global_position - placed_object.size) <= world_to_map(tile_center_pos)  or world_to_map(tile_center_pos) >= world_to_map(placed_object.global_position+placed_object.size)  : #world_to_map(placed_object.global_position) == clicked_cell or #placed_object.global_position == self.tile_center_pos:
 						
 						# when a placed object in Placed-Buildings is clicked, it will update World scene to draw the radius and show gui
 						placed_object.selected = !placed_object.selected
 						
 						
 						building_code_background._change_first_var(placed_object.first_changeable_var)
-						first_change_var_input.text = str(placed_object.production_speed)
-						
-						building_code_background._change_class(placed_object.building_name)
+						first_change_var_input.text = str(placed_object.var_dict[0])#placed_object.production_speed)
+
+						# use placed_object.get_name() to have cool @Coal_Factor@1042 but normal is placed_object.building_name
+						building_code_background._change_class(placed_object.get_name())
 						building_code_background.building = placed_object
 						
 						if placed_object.selected:
@@ -94,14 +97,14 @@ func _spawn_building():
 		
 		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Storage"):
-		self.get_parent().get_node("Placed-Buildings/Storages").add_child(f)
+		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
 		
 		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Conveyor"):
 		self.get_parent().get_node("Placed-Buildings/Conveyors").add_child(f)
 		
 	elif (factory_selector.building_dict[factory_selector.selected_button_index] == "Hub"):
-		self.get_parent().get_node("Placed-Buildings/Hub").add_child(f)
+		self.get_parent().get_node("Placed-Buildings/Factories").add_child(f)
 
 	_fill_building_tile_array(f)
 
@@ -180,22 +183,14 @@ func spawn_temp_building():
 	#		f.modulate = Color(1, 0.427451, 0.427451, 0.482353)
 	#	temp_buildings.add_child(f)
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	for child in temp_buildings.get_children():
-		child.queue_free()
-		#temp_buildings.remove_child(child)
-	spawn_temp_building()
+# checks the placement of the temp building, and turns it red if it is over another building or over water
+func check_building_placement():
 	stop = false
 	temp_building_red = false
 	if factory_selector.selected_button_index != -1:
-		var temp_arrays = _fill_temp_tile_array(tile_size_dict[factory_selector.building_dict[factory_selector.selected_button_index]])
+		
+		# gets the tile positions of the tiles the temp-building will occupy
+		var temp_arrays = _fill_temp_tile_array(tile_size_dict[factory_selector.building_dict[factory_selector.selected_button_index]]) 
 		for node in get_parent().get_node("Placed-Buildings").get_children():
 			if node.name != "Pre-Placement":
 				for building in node.get_children():
@@ -208,3 +203,18 @@ func _process(delta):
 							if Vector2(temp_arrays[0][c],temp_arrays[1][c]) == Vector2(building.tiles_placed_on_x[i],building.tiles_placed_on_y[i]) or "water" in chunk_tile_map.tile_set.tile_get_name(chunk_tile_map.get_cellv(Vector2(temp_arrays[0][c],temp_arrays[1][c]))):
 								stop = true
 								temp_building_red = true
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	for child in temp_buildings.get_children():
+		child.queue_free()
+		#temp_buildings.remove_child(child)
+	spawn_temp_building()
+	check_building_placement()
+	

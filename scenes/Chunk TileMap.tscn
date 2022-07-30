@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
+[ext_resource path="res://scripts/world/world_tilemap_ores_node.gd" type="Script" id=1]
 [ext_resource path="res://sprites/tilemap/water32x32.png" type="Texture" id=2]
 [ext_resource path="res://sprites/tilemap/sand32x32.png" type="Texture" id=3]
 [ext_resource path="res://scripts/world/Chunk TileMap.gd" type="Script" id=4]
@@ -121,5 +122,8 @@ chunk_height = 64
 [node name="MapUpdateTimer" type="Timer" parent="."]
 wait_time = 0.1
 autostart = true
+
+[node name="Ores" type="Node2D" parent="."]
+script = ExtResource( 1 )
 
 [connection signal="timeout" from="MapUpdateTimer" to="." method="_on_MapUpdateTimer_timeout"]

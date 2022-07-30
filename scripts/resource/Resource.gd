@@ -22,8 +22,31 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	_collect_resources(delta)
+	pass
+
+func _collect_resources(delta:float):
+	var mouse_pos = get_global_mouse_position() #+camera.global_position
+	#r.lifetime -= delta
+	var dist = mouse_pos.distance_to(global_position)
+	
+	if  dist <= 5:
+		queue_free()
+		get_parent().get_parent().get_node("Player").stats.collected_resources[resource_index] += stack
+	
+	# check if tween is active to let reduce lag and it will complete its move before starting another
+	elif dist <= 40 and not tween.is_active():
+		tween.interpolate_property(self, "position", global_position, mouse_pos, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		tween.start()
+	elif dist > 40 and global_position.distance_to(go_position) > 5 and not tween.is_active():
+		tween.interpolate_property(self, "position", global_position, go_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		tween.start()
+	
+	if lifetime < 10:
+		modulate = Color(0.392157, 0.313726, 0.207843)#Color(1.0,1.0,1.0, 0.5)
+	if lifetime < 0:
+		queue_free()
 
 
 func _on_Tween_tween_all_completed():

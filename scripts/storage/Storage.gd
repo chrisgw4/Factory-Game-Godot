@@ -21,3 +21,15 @@ func _show_resources_held():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func save():
+	var save_dict = {
+		"filename" : get_filename(),
+		#"parent" : get_parent().get_path(),
+		"pos_x" : position.x, # Vector2 is not supported by JSON
+		"pos_y" : position.y,
+		"tiles_placed_on_x":tiles_placed_on_x,
+		"tiles_placed_on_y":tiles_placed_on_y,
+	}
+	return save_dict

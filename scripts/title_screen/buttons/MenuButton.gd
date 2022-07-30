@@ -20,3 +20,4 @@ func _on_NewGameButton_pressed():
 	dir.remove("save.tres")
 	dir.remove("chunk_map.save")
 	dir.remove("factories.save")
+	dir.remove("ores.save")

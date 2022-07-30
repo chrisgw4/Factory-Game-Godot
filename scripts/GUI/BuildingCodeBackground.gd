@@ -27,8 +27,6 @@ func _process(delta:float):
 	elif get_rect().position == base_position and self.visible and Input.is_action_just_pressed("open_building_menu"):
 		_start_tween_to_close()
 		get_parent().get_parent().unselect_all()
-		#tween.interpolate_property(self, "rect_position", ready_to_open,  base_position, .15, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		#tween.start()
 		self.visible = true
 
 
@@ -48,9 +46,10 @@ func _change_first_var_desc(new_var_desc):
 
 
 # called when the first variable's text box recieves a new text and changes the variable of the building to reflect the change
-func _on_FirstVarChangeInput_text_entered(new_text):
-	if building != null and new_text.is_valid_float():
-		building.set(building.change_var_dict["firstvar"], new_text)
+#func _on_FirstVarChangeInput_text_entered(new_text):
+#	if building != null and new_text.is_valid_float():
+#		print(str(new_text) + " DEEZ")
+#		building.set(building.change_var_dict["firstvar"], new_text)
 		
 
 func _start_tween_to_close():
@@ -77,7 +76,9 @@ func _type_letters():
 			tween.interpolate_property(node, "visible_characters", 0, len(node.text), .9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 
 
+# when a new text is input for the variable, it sets the variable to the new inputed value
 func _on_Variable_text_entered():
 	print($VBoxContainer/Variable.input_text)
 	if building != null and $VBoxContainer/Variable.input_text.is_valid_float():
 		building.set(building.change_var_dict["firstvar"], $VBoxContainer/Variable.input_text)
+		
